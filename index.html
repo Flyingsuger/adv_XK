@@ -20,10 +20,6 @@
             --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             --danger-light: #ffe4e6;
             --danger: #e11d48;
-            --success: #16a34a;
-            --success-light: #dcfce7;
-            --warning: #f59e0b;
-            --warning-light: #fef3c7;
         }
         
         body, html { 
@@ -123,90 +119,6 @@
             border: 1px solid #fef08a; 
             flex-shrink: 0; 
         }
-
-        /* ================== 新增：选课倒计时区域 ================== */
-        .countdown-panel {
-            background: white;
-            border-radius: 16px;
-            padding: 14px 18px;
-            margin-bottom: 15px;
-            box-shadow: var(--card-shadow);
-            border: 1px solid var(--border);
-            flex-shrink: 0;
-        }
-
-        .countdown-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-
-        .countdown-title {
-            font-size: 14px;
-            font-weight: 800;
-            color: #1e293b;
-        }
-
-        .countdown-time {
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--primary);
-            text-align: right;
-            line-height: 1.4;
-        }
-
-        .countdown-meta {
-            font-size: 11px;
-            color: #64748b;
-            line-height: 1.5;
-            margin-bottom: 10px;
-        }
-
-        .progress-track {
-            width: 100%;
-            height: 12px;
-            background: #e2e8f0;
-            border-radius: 999px;
-            overflow: hidden;
-        }
-
-        .progress-bar {
-            height: 100%;
-            width: 0%;
-            border-radius: 999px;
-            transition: width 0.5s linear, background 0.3s;
-            background: linear-gradient(90deg, #22c55e, #3b82f6);
-        }
-
-        .countdown-panel.waiting {
-            background: var(--warning-light);
-            border-color: #fde68a;
-        }
-
-        .countdown-panel.waiting .countdown-time {
-            color: #b45309;
-        }
-
-        .countdown-panel.running {
-            background: #eff6ff;
-            border-color: #bfdbfe;
-        }
-
-        .countdown-panel.running .countdown-time {
-            color: #1d4ed8;
-        }
-
-        .countdown-panel.ended {
-            background: #f1f5f9;
-            border-color: #cbd5e1;
-            opacity: 0.9;
-        }
-
-        .countdown-panel.ended .countdown-time {
-            color: #64748b;
-        }
         
         .header-tools { 
             display: flex; 
@@ -256,7 +168,10 @@
             color: white; 
         }
 
-        /* 矩阵排除控制面板 */
+        /* ========================
+           矩阵排除控制面板
+           改为按 1-2、3-4、5-6、7-8、9-10 屏蔽
+           ======================== */
         .exclusion-panel {
             background: rgba(255, 255, 255, 0.6);
             padding: 12px;
@@ -279,7 +194,7 @@
         
         .matrix-container { 
             display: grid; 
-            grid-template-columns: 40px repeat(5, 1fr); 
+            grid-template-columns: 44px repeat(5, 1fr); 
             gap: 6px; 
             width: 100%; 
         }
@@ -355,7 +270,7 @@
             width: 100%; 
             height: 100%; 
             grid-template-columns: 50px repeat(5, 1fr); 
-            grid-template-rows: 35px repeat(6, 1fr); 
+            grid-template-rows: 35px repeat(5, 1fr); 
             gap: 4px; 
             overflow: auto; 
         }
@@ -451,6 +366,86 @@
             border-top: 1px dashed var(--border); 
         }
 
+        /* ================== 新增：悬浮倒计时，不占布局空间 ================== */
+        .floating-countdown {
+            position: fixed;
+            top: 12px;
+            right: 340px;
+            width: 300px;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.16);
+            z-index: 999;
+            padding: 10px 12px;
+            box-sizing: border-box;
+            font-size: 12px;
+        }
+
+        .floating-countdown.waiting {
+            border-color: #fde68a;
+            background: rgba(255, 251, 235, 0.96);
+        }
+
+        .floating-countdown.running {
+            border-color: #bfdbfe;
+            background: rgba(239, 246, 255, 0.96);
+        }
+
+        .floating-countdown.ended {
+            border-color: #cbd5e1;
+            background: rgba(248, 250, 252, 0.96);
+        }
+
+        .floating-countdown-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .floating-countdown-title {
+            font-weight: 800;
+            color: #1e293b;
+            white-space: nowrap;
+        }
+
+        .floating-countdown-time {
+            font-weight: 800;
+            color: var(--primary);
+            text-align: right;
+            font-size: 12px;
+            line-height: 1.3;
+        }
+
+        .floating-countdown-meta {
+            margin-top: 5px;
+            color: #64748b;
+            font-size: 10px;
+            line-height: 1.4;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .floating-progress-track {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 999px;
+            overflow: hidden;
+            margin-top: 7px;
+        }
+
+        .floating-progress-bar {
+            height: 100%;
+            width: 0%;
+            border-radius: 999px;
+            transition: width 0.5s linear, background 0.3s;
+            background: linear-gradient(90deg, #22c55e, #3b82f6);
+        }
+
         /* 响应式 */
         @media screen and (max-width: 1024px) {
             body { 
@@ -520,16 +515,20 @@
 
             .mx-cell { 
                 font-size: 11px; 
-                height: 36px; 
+                height: 34px; 
             }
 
-            .countdown-top {
-                flex-direction: column;
-                align-items: flex-start;
+            .floating-countdown {
+                top: auto;
+                left: 10px;
+                right: 10px;
+                bottom: 10px;
+                width: auto;
+                padding: 9px 11px;
             }
 
-            .countdown-time {
-                text-align: left;
+            .floating-countdown-meta {
+                display: none;
             }
         }
     </style>
@@ -550,18 +549,6 @@
 
 <div class="content">
     <div id="banner" class="banner"></div>
-
-    <!-- 新增：倒计时显示区域 -->
-    <div id="countdownPanel" class="countdown-panel">
-        <div class="countdown-top">
-            <div id="countdownTitle" class="countdown-title">⏳ 选课时间</div>
-            <div id="countdownTime" class="countdown-time">正在计算...</div>
-        </div>
-        <div id="countdownMeta" class="countdown-meta"></div>
-        <div class="progress-track">
-            <div id="progressBar" class="progress-bar"></div>
-        </div>
-    </div>
     
     <div class="header-tools">
         <input type="text" id="locateSearch" class="locate-input" placeholder="🔍 输入课程、教师名实时筛选..." oninput="handleSearch()">
@@ -590,10 +577,22 @@
     <div id="courseList" class="course-list"></div>
 </div>
 
+<!-- 悬浮倒计时：不放在 content 里，所以不会挤压课程表 -->
+<div id="floatingCountdown" class="floating-countdown">
+    <div class="floating-countdown-top">
+        <div id="countdownTitle" class="floating-countdown-title">⏳ 选课时间</div>
+        <div id="countdownTime" class="floating-countdown-time">正在计算...</div>
+    </div>
+    <div id="countdownMeta" class="floating-countdown-meta"></div>
+    <div class="floating-progress-track">
+        <div id="progressBar" class="floating-progress-bar"></div>
+    </div>
+</div>
+
 <script>
 // ================== 课程数据 ==================
-// 每个课程组新增 startTime 和 endTime
-// 格式建议使用：YYYY-MM-DD HH:mm
+// 每个课程组都可以单独设置 startTime 和 endTime
+// 时间格式建议：YYYY-MM-DD HH:mm
 const DATA_STORE = {
     "26-27技能选修课": {
         "notice": "<b>提醒：</b>该工具仅对选课进行梳理，方便校对自己课表，请根据自己实际需求，老师要求进行选择课程，选择课程后记得去学校教学系统确认要求，二次确认。",
@@ -823,21 +822,24 @@ const DATA_STORE = {
 
 const DAYS = ['周一', '周二', '周三', '周四', '周五'];
 
-const PERIODS = [
-    { name: '上午', range: [1, 4] },
-    { name: '下午', range: [5, 8] },
-    { name: '晚上', range: [9, 12] }
+// 课程表节次：晚上只保留 9-10
+const SLOT_ROWS = [
+    { label: '1-2', start: 1, end: 2 },
+    { label: '3-4', start: 3, end: 4 },
+    { label: '5-6', start: 5, end: 6 },
+    { label: '7-8', start: 7, end: 8 },
+    { label: '9-10', start: 9, end: 10 }
 ];
 
 let currentPool = [];    
 let currentSubTag = '全部'; 
 let currentKeyword = '';
-let excludedMatrix = Array(5).fill(null).map(() => [false, false, false]);
 
-// 当前选中的课程组名称
+// 现在是 5 天 × 5 个具体节次段
+// 分别对应：1-2、3-4、5-6、7-8、9-10
+let excludedMatrix = Array(5).fill(null).map(() => Array(SLOT_ROWS.length).fill(false));
+
 let currentGroupName = '';
-
-// 倒计时定时器
 let countdownTimer = null;
 
 function init() {
@@ -869,21 +871,16 @@ function init() {
     }
 }
 
-// ================== 新增：时间解析函数 ==================
-// 把 "2026-06-01 12:00" 转成 Date 对象
+// ================== 倒计时相关 ==================
 function parseDateTime(str) {
     if (!str) return null;
-
-    // 兼容 Safari，避免 Safari 无法稳定识别 "2026-06-01 12:00"
     return new Date(str.replace(/-/g, '/'));
 }
 
-// ================== 新增：补零函数 ==================
 function padZero(num) {
     return String(num).padStart(2, '0');
 }
 
-// ================== 新增：格式化剩余时间 ==================
 function formatDuration(ms) {
     if (ms <= 0) return '00天 00小时 00分 00秒';
 
@@ -896,15 +893,8 @@ function formatDuration(ms) {
     return `${padZero(days)}天 ${padZero(hours)}小时 ${padZero(minutes)}分 ${padZero(seconds)}秒`;
 }
 
-// ================== 新增：格式化显示时间 ==================
-function formatDateLabel(str) {
-    if (!str) return '未设置';
-    return str;
-}
-
-// ================== 新增：更新选课倒计时 ==================
 function updateCountdown() {
-    const panel = document.getElementById('countdownPanel');
+    const panel = document.getElementById('floatingCountdown');
     const title = document.getElementById('countdownTitle');
     const time = document.getElementById('countdownTime');
     const meta = document.getElementById('countdownMeta');
@@ -928,8 +918,8 @@ function updateCountdown() {
 
     if (!start || !end || isNaN(start.getTime()) || isNaN(end.getTime())) {
         panel.classList.add('ended');
-        title.innerText = '⏳ 选课时间未设置';
-        time.innerText = '请在 DATA_STORE 中设置 startTime 和 endTime';
+        title.innerText = '⏳ 未设置';
+        time.innerText = '请设置时间';
         meta.innerText = '';
         bar.style.width = '0%';
         return;
@@ -937,56 +927,47 @@ function updateCountdown() {
 
     if (end <= start) {
         panel.classList.add('ended');
-        title.innerText = '⚠️ 选课时间设置错误';
-        time.innerText = '结束时间必须晚于开始时间';
-        meta.innerText = `开始：${formatDateLabel(group.startTime)}　结束：${formatDateLabel(group.endTime)}`;
+        title.innerText = '⚠️ 时间错误';
+        time.innerText = '结束需晚于开始';
+        meta.innerText = `开始：${group.startTime}　结束：${group.endTime}`;
         bar.style.width = '0%';
         return;
     }
 
-    meta.innerText = `开始：${formatDateLabel(group.startTime)}　结束：${formatDateLabel(group.endTime)}`;
+    meta.innerText = `开始：${group.startTime}　结束：${group.endTime}`;
 
-    // 还没到开始时间
     if (now < start) {
         const remainToStart = start - now;
 
         panel.classList.add('waiting');
-        title.innerText = '⏳ 距离选课开始还有';
+        title.innerText = '⏳ 距开始';
         time.innerText = formatDuration(remainToStart);
 
-        // 未开始时，进度条不显示进度
         bar.style.width = '0%';
         bar.style.background = 'linear-gradient(90deg, #f59e0b, #f97316)';
-
         return;
     }
 
-    // 已经结束
     if (now >= end) {
         panel.classList.add('ended');
-        title.innerText = '✅ 选课已结束';
+        title.innerText = '✅ 已结束';
         time.innerText = '00天 00小时 00分 00秒';
 
         bar.style.width = '0%';
         bar.style.background = '#94a3b8';
-
         return;
     }
 
-    // 正在选课中
     const total = end - start;
     const remain = end - now;
-
-    // 剩余比例：刚开始接近 100%，快结束接近 0%
     const remainPercent = Math.max(0, Math.min(100, remain / total * 100));
 
     panel.classList.add('running');
-    title.innerText = '🔥 距离选课结束还有';
+    title.innerText = '🔥 距结束';
     time.innerText = formatDuration(remain);
 
     bar.style.width = remainPercent + '%';
 
-    // 根据剩余时间变色
     if (remainPercent > 60) {
         bar.style.background = 'linear-gradient(90deg, #22c55e, #3b82f6)';
     } else if (remainPercent > 30) {
@@ -996,7 +977,6 @@ function updateCountdown() {
     }
 }
 
-// ================== 新增：启动倒计时 ==================
 function startCountdown() {
     if (countdownTimer) {
         clearInterval(countdownTimer);
@@ -1009,7 +989,37 @@ function startCountdown() {
     }, 1000);
 }
 
-// 渲染矩阵控制
+// ================== 屏蔽矩阵相关 ==================
+function getSlotIndexByPeriod(period) {
+    if (period >= 1 && period <= 2) return 0;
+    if (period >= 3 && period <= 4) return 1;
+    if (period >= 5 && period <= 6) return 2;
+    if (period >= 7 && period <= 8) return 3;
+    if (period >= 9 && period <= 10) return 4;
+    return -1;
+}
+
+function isCourseExcluded(course) {
+    const startIdx = getSlotIndexByPeriod(course.b);
+    const endIdx = getSlotIndexByPeriod(course.e);
+
+    if (startIdx === -1 || endIdx === -1) {
+        return false;
+    }
+
+    for (let i = startIdx; i <= endIdx; i++) {
+        if (excludedMatrix[course.d][i]) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+function isSlotExcluded(dayIdx, slotIdx) {
+    return excludedMatrix[dayIdx][slotIdx];
+}
+
 function renderMatrixControl() {
     const container = document.getElementById('matrixContainer');
     let html = '<div class="mx-cell" style="border:none; background:none;"></div>'; 
@@ -1019,27 +1029,26 @@ function renderMatrixControl() {
         html += `<div class="mx-cell mx-head-col ${isColFull ? 'excluded' : ''}" onclick="toggleColumn(${dayIdx})">${d}</div>`;
     });
 
-    PERIODS.forEach((p, pIdx) => {
+    SLOT_ROWS.forEach((slot, slotIdx) => {
         let isRowFull = true;
 
         for (let d = 0; d < 5; d++) { 
-            if (!excludedMatrix[d][pIdx]) isRowFull = false; 
+            if (!excludedMatrix[d][slotIdx]) isRowFull = false; 
         }
         
-        html += `<div class="mx-cell mx-head-row ${isRowFull ? 'excluded' : ''}" onclick="toggleRow(${pIdx})">${p.name}</div>`;
+        html += `<div class="mx-cell mx-head-row ${isRowFull ? 'excluded' : ''}" onclick="toggleRow(${slotIdx})">${slot.label}</div>`;
 
         for (let d = 0; d < 5; d++) {
-            const isExcluded = excludedMatrix[d][pIdx];
-            html += `<div class="mx-cell ${isExcluded ? 'excluded' : ''}" onclick="toggleMatrixCell(${d}, ${pIdx})">${isExcluded ? '🚫' : ''}</div>`;
+            const isExcluded = excludedMatrix[d][slotIdx];
+            html += `<div class="mx-cell ${isExcluded ? 'excluded' : ''}" onclick="toggleMatrixCell(${d}, ${slotIdx})">${isExcluded ? '🚫' : ''}</div>`;
         }
     });
 
     container.innerHTML = html;
 }
 
-// 矩阵逻辑函数
-function toggleMatrixCell(d, pIdx) {
-    excludedMatrix[d][pIdx] = !excludedMatrix[d][pIdx];
+function toggleMatrixCell(d, slotIdx) {
+    excludedMatrix[d][slotIdx] = !excludedMatrix[d][slotIdx];
     renderMatrixControl();
     handleSearch();
 }
@@ -1051,15 +1060,15 @@ function toggleColumn(d) {
     handleSearch();
 }
 
-function toggleRow(pIdx) {
+function toggleRow(slotIdx) {
     let allSelected = true;
 
     for (let d = 0; d < 5; d++) { 
-        if (!excludedMatrix[d][pIdx]) allSelected = false; 
+        if (!excludedMatrix[d][slotIdx]) allSelected = false; 
     }
 
     for (let d = 0; d < 5; d++) { 
-        excludedMatrix[d][pIdx] = !allSelected; 
+        excludedMatrix[d][slotIdx] = !allSelected; 
     }
 
     renderMatrixControl();
@@ -1067,40 +1076,27 @@ function toggleRow(pIdx) {
 }
 
 function resetExclusion() {
-    excludedMatrix = Array(5).fill(null).map(() => [false, false, false]);
+    excludedMatrix = Array(5).fill(null).map(() => Array(SLOT_ROWS.length).fill(false));
     renderMatrixControl();
     handleSearch();
 }
 
-function isSlotExcluded(dayIdx, p) {
-    let pIdx = -1;
-
-    if (p <= 4) {
-        pIdx = 0;
-    } else if (p <= 8) {
-        pIdx = 1;
-    } else {
-        pIdx = 2;
-    }
-
-    return excludedMatrix[dayIdx][pIdx];
-}
-
-// 渲染主网格
+// ================== 渲染主网格 ==================
 function renderGrid() {
     const grid = document.getElementById('grid');
+
     grid.innerHTML = '<div class="cell head"></div>' + DAYS.map(d => `<div class="cell head">${d}</div>`).join('');
 
-    for (let p = 1; p <= 11; p += 2) {
-        grid.innerHTML += `<div class="cell head">${p}-${p + 1}</div>`;
+    SLOT_ROWS.forEach((slot, slotIdx) => {
+        grid.innerHTML += `<div class="cell head">${slot.label}</div>`;
 
         for (let d = 0; d < 5; d++) {
-            grid.innerHTML += `<div class="cell" id="cell-${d}-${p}" onclick="showSlotDetail(${d},${p})"></div>`;
+            grid.innerHTML += `<div class="cell" id="cell-${d}-${slotIdx}" onclick="showSlotDetail(${d},${slotIdx})"></div>`;
         }
-    }
+    });
 }
 
-// 切换课程组
+// ================== 切换课程组 ==================
 function switchGroup(groupName) {
     currentGroupName = groupName;
 
@@ -1110,12 +1106,10 @@ function switchGroup(groupName) {
 
     document.getElementById('banner').innerHTML = group.notice || "暂无公告";
 
-    // 切换课程组时，启动对应课程组的倒计时
     startCountdown();
 
     const subTags = new Set(['全部']);
     
-    // 遍历课程，使用正则自动提取标签
     currentPool.forEach(c => {
         const matches = c.n.match(/\(([^)]+)\)$/);
         
@@ -1131,7 +1125,6 @@ function switchGroup(groupName) {
     const container = document.getElementById('filterChips');
     container.innerHTML = '';
     
-    // 渲染自动生成的标签
     Array.from(subTags).forEach(tag => {
         const chip = document.createElement('div');
         chip.className = `tag-chip ${tag === '全部' ? 'active' : ''}`;
@@ -1161,26 +1154,20 @@ function getHeatColor(count, isSearch) {
     return `hsl(217, 91%, ${lightness}%)`;
 }
 
+function getBigSlotIndexByCourse(course) {
+    return getSlotIndexByPeriod(course.b);
+}
+
+// ================== 搜索和课程表刷新 ==================
 function handleSearch() {
     currentKeyword = document.getElementById('locateSearch').value.trim().toLowerCase();
     const inputEl = document.getElementById('locateSearch');
     
     const filteredList = currentPool.filter(c => {
-        // 排除逻辑
-        let pIdx = -1;
+        if (isCourseExcluded(c)) return false;
 
-        if (c.b <= 4) {
-            pIdx = 0;
-        } else if (c.b <= 8) {
-            pIdx = 1;
-        } else {
-            pIdx = 2;
-        }
-
-        if (excludedMatrix[c.d][pIdx]) return false;
-
-        // 标签与搜索逻辑
         const matchTag = currentSubTag === '全部' || c.subCategory === currentSubTag;
+
         const matchKey = !currentKeyword || 
             c.n.toLowerCase().includes(currentKeyword) || 
             (c.t && c.t.toLowerCase().includes(currentKeyword));
@@ -1188,30 +1175,32 @@ function handleSearch() {
         return matchTag && matchKey;
     });
 
-    // 重置与渲染格子
     document.querySelectorAll('.cell:not(.head)').forEach(el => {
         el.className = 'cell'; 
         el.style = ''; 
         el.innerHTML = '';
     });
 
-    for (let p = 1; p <= 11; p += 2) {
+    SLOT_ROWS.forEach((slot, slotIdx) => {
         for (let d = 0; d < 5; d++) {
-            if (isSlotExcluded(d, p)) {
-                const el = document.getElementById(`cell-${d}-${p}`);
+            if (isSlotExcluded(d, slotIdx)) {
+                const el = document.getElementById(`cell-${d}-${slotIdx}`);
 
                 if (el) {
                     el.classList.add('excluded-slot');
                 }
             }
         }
-    }
+    });
 
     const counts = {};
 
     filteredList.forEach(c => {
-        const bigSlot = c.b % 2 === 0 ? c.b - 1 : c.b; 
-        const key = `${c.d}-${bigSlot}`;
+        const slotIdx = getBigSlotIndexByCourse(c);
+
+        if (slotIdx === -1) return;
+
+        const key = `${c.d}-${slotIdx}`;
         counts[key] = (counts[key] || 0) + 1;
     });
 
@@ -1240,38 +1229,31 @@ function handleSearch() {
     renderList(currentKeyword ? filteredList : null);
 }
 
-function showSlotDetail(d, p) {
-    if (isSlotExcluded(d, p)) return;
+function showSlotDetail(d, slotIdx) {
+    if (isSlotExcluded(d, slotIdx)) return;
 
     document.querySelectorAll('.cell').forEach(el => el.classList.remove('active-slot'));
 
-    const target = document.getElementById(`cell-${d}-${p}`);
+    const target = document.getElementById(`cell-${d}-${slotIdx}`);
 
     if (target) {
         target.classList.add('active-slot');
     }
 
-    document.getElementById('slotInfo').innerText = `${DAYS[d]} 第${p}-${p + 1}节 选中详情`;
+    const slot = SLOT_ROWS[slotIdx];
+
+    document.getElementById('slotInfo').innerText = `${DAYS[d]} 第${slot.label}节 选中详情`;
     
     const slotList = currentPool.filter(c => {
-        let pIdx = -1;
-
-        if (c.b <= 4) {
-            pIdx = 0;
-        } else if (c.b <= 8) {
-            pIdx = 1;
-        } else {
-            pIdx = 2;
-        }
-
-        if (excludedMatrix[c.d][pIdx]) return false;
+        if (isCourseExcluded(c)) return false;
 
         const matchTag = currentSubTag === '全部' || c.subCategory === currentSubTag;
+
         const matchKey = !currentKeyword || 
             c.n.toLowerCase().includes(currentKeyword) || 
             (c.t && c.t.toLowerCase().includes(currentKeyword));
 
-        const hasOverlap = c.b <= p + 1 && c.e >= p;
+        const hasOverlap = c.b <= slot.end && c.e >= slot.start;
 
         return matchTag && matchKey && c.d === d && hasOverlap;
     });
