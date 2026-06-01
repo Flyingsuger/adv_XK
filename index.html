@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>选课辅助系统 - 25广告1班</title>
+    <title>选课辅助系统 - 带选课购物车版</title>
     <style>
-        /* ================== 样式定义 ================== */
         :root { 
             --sidebar-bg: #1e293b; 
             --main-bg: #f1f5f9; 
@@ -20,6 +19,11 @@
             --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             --danger-light: #ffe4e6;
             --danger: #e11d48;
+            --purple: #7c3aed;
+            --purple-light: #ede9fe;
+            --purple-border: #c4b5fd;
+            --success: #16a34a;
+            --success-light: #dcfce7;
         }
         
         body, html { 
@@ -36,7 +40,6 @@
             overflow: hidden; 
         }
         
-        /* 侧边栏 */
         .sidebar { 
             width: 260px; 
             background: var(--sidebar-bg); 
@@ -72,7 +75,7 @@
         }
         
         .db-item { 
-            padding: 12px 18px; 
+            padding: 12px 14px; 
             margin-bottom: 8px; 
             border-radius: 12px; 
             cursor: pointer; 
@@ -87,6 +90,43 @@
             box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); 
         }
 
+        .db-item-main {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .db-item-title {
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .db-item-credit {
+            font-size: 10px;
+            opacity: 0.9;
+            background: rgba(255,255,255,0.15);
+            padding: 2px 6px;
+            border-radius: 999px;
+            flex-shrink: 0;
+        }
+
+        .db-item-tip {
+            margin-top: 5px;
+            font-size: 10px;
+            color: #cbd5e1;
+        }
+
+        .db-item.done .db-item-credit {
+            background: rgba(22, 163, 74, 0.9);
+            color: white;
+        }
+
+        .db-item.over .db-item-credit {
+            background: rgba(225, 29, 72, 0.9);
+            color: white;
+        }
+
         .sidebar-footer { 
             padding: 15px; 
             border-top: 1px solid #334155; 
@@ -96,7 +136,6 @@
             line-height: 1.6; 
         }
 
-        /* 主区域 */
         .content { 
             flex: 1; 
             display: flex; 
@@ -145,6 +184,38 @@
             box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.1); 
         }
 
+        .group-credit-panel {
+            background: white;
+            border: 1px solid var(--border);
+            box-shadow: var(--card-shadow);
+            border-radius: 14px;
+            padding: 10px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+        }
+
+        .group-credit-title {
+            font-weight: 800;
+            color: #1e293b;
+        }
+
+        .group-credit-info {
+            color: #64748b;
+            text-align: right;
+            line-height: 1.5;
+        }
+
+        .group-credit-info strong {
+            color: var(--primary);
+        }
+
+        .group-credit-info.done strong {
+            color: var(--success);
+        }
+
         .filter-container { 
             display: flex; 
             flex-wrap: wrap; 
@@ -168,10 +239,6 @@
             color: white; 
         }
 
-        /* ========================
-           矩阵排除控制面板
-           改为按 1-2、3-4、5-6、7-8、9-10 屏蔽
-           ======================== */
         .exclusion-panel {
             background: rgba(255, 255, 255, 0.6);
             padding: 12px;
@@ -246,12 +313,6 @@
             font-weight: bold; 
         }
 
-        .mx-cell:not(.mx-head-col):not(.mx-head-row):hover { 
-            border-color: var(--primary); 
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05); 
-        }
-
-        /* 网格与格子 */
         .grid-wrapper { 
             flex: 1; 
             min-height: 0; 
@@ -322,7 +383,18 @@
             border-color: transparent !important;
         }
 
-        /* 右侧面板 */
+        .cell.conflict-slot {
+            background: var(--purple-light) !important;
+            border-color: var(--purple-border) !important;
+            color: var(--purple) !important;
+        }
+
+        .cell.selected-slot {
+            background: var(--success-light) !important;
+            border-color: #86efac !important;
+            color: var(--success) !important;
+        }
+
         .side-panel { 
             width: 320px; 
             background: white; 
@@ -350,6 +422,18 @@
             border-radius: 12px; 
             margin-bottom: 12px; 
             overflow: hidden; 
+            transition: 0.2s;
+        }
+
+        .course-card.selected {
+            border-color: #86efac;
+            background: #f0fdf4;
+        }
+
+        .course-card.conflict {
+            border-color: var(--purple-border);
+            background: var(--purple-light);
+            opacity: 0.88;
         }
 
         .card-head { 
@@ -359,6 +443,16 @@
             background: #fcfcfc; 
         }
 
+        .course-card.selected .card-head {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .course-card.conflict .card-head {
+            background: #ddd6fe;
+            color: var(--purple);
+        }
+
         .card-body { 
             padding: 12px; 
             font-size: 12px; 
@@ -366,7 +460,52 @@
             border-top: 1px dashed var(--border); 
         }
 
-        /* ================== 新增：悬浮倒计时，不占布局空间 ================== */
+        .card-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .select-btn {
+            border: none;
+            border-radius: 8px;
+            padding: 7px 10px;
+            font-size: 12px;
+            cursor: pointer;
+            background: var(--primary);
+            color: white;
+            font-weight: 700;
+            flex: 1;
+        }
+
+        .select-btn:hover {
+            filter: brightness(0.95);
+        }
+
+        .select-btn.remove {
+            background: var(--danger);
+        }
+
+        .select-btn.disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+        }
+
+        .select-btn.conflict {
+            background: var(--purple);
+            cursor: not-allowed;
+        }
+
+        .small-badge {
+            margin-top: 4px; 
+            font-size: 10px; 
+            color: #94a3b8; 
+            border: 1px solid #e2e8f0; 
+            display: inline-block; 
+            padding: 0 4px; 
+            border-radius: 4px;
+        }
+
         .floating-countdown {
             position: fixed;
             top: 12px;
@@ -446,7 +585,263 @@
             background: linear-gradient(90deg, #22c55e, #3b82f6);
         }
 
-        /* 响应式 */
+        /* ================== 左下角购物车 ================== */
+      /* ================== 左下角购物车：新版美化 ================== */
+.cart-panel {
+    position: fixed;
+    left: 14px;
+    bottom: 14px;
+    width: 310px;
+    max-height: 62vh;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(226, 232, 240, 0.95);
+    border-radius: 20px;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.28);
+    z-index: 1000;
+    overflow: hidden;
+    transition: all 0.25s ease;
+}
+
+.cart-panel.collapsed {
+    width: 270px;
+    max-height: 54px;
+}
+
+.cart-header {
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    color: white;
+    padding: 12px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 900;
+    user-select: none;
+}
+
+.cart-header-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cart-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+}
+
+.cart-title-main {
+    line-height: 1.2;
+}
+
+.cart-title-sub {
+    font-size: 10px;
+    font-weight: 400;
+    color: #cbd5e1;
+    margin-top: 2px;
+}
+
+.cart-count {
+    background: var(--primary);
+    color: white;
+    border-radius: 999px;
+    padding: 2px 7px;
+    font-size: 11px;
+    margin-left: 4px;
+}
+
+.cart-toggle {
+    font-size: 11px;
+    color: #cbd5e1;
+    background: rgba(255,255,255,0.08);
+    padding: 4px 8px;
+    border-radius: 999px;
+}
+
+.cart-body {
+    padding: 12px;
+    overflow-y: auto;
+    max-height: calc(62vh - 54px);
+}
+
+.cart-body::-webkit-scrollbar {
+    width: 5px;
+}
+
+.cart-body::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 999px;
+}
+
+.cart-summary {
+    background: linear-gradient(135deg, #eff6ff, #f8fafc);
+    border: 1px solid #dbeafe;
+    border-radius: 14px;
+    padding: 11px;
+    font-size: 12px;
+    color: #334155;
+    line-height: 1.6;
+    margin-bottom: 12px;
+}
+
+.cart-summary-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.cart-summary strong {
+    color: var(--primary);
+}
+
+.cart-progress-track {
+    width: 100%;
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 999px;
+    overflow: hidden;
+    margin-top: 8px;
+}
+
+.cart-progress-bar {
+    height: 100%;
+    width: 0%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #3b82f6, #22c55e);
+    transition: width 0.3s ease;
+}
+
+.cart-group {
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    margin-bottom: 12px;
+    overflow: hidden;
+    background: white;
+}
+
+.cart-group.done {
+    border-color: #86efac;
+    background: #f0fdf4;
+}
+
+.cart-group-title {
+    padding: 10px 11px;
+    background: #f8fafc;
+    font-size: 12px;
+    font-weight: 900;
+    color: #334155;
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    align-items: center;
+}
+
+.cart-group.done .cart-group-title {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.cart-group-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.cart-group-credit {
+    flex-shrink: 0;
+    font-size: 11px;
+    padding: 2px 7px;
+    border-radius: 999px;
+    background: #e0f2fe;
+    color: #0369a1;
+}
+
+.cart-group.done .cart-group-credit {
+    background: #22c55e;
+    color: white;
+}
+
+.cart-group-progress {
+    height: 6px;
+    background: #e2e8f0;
+    overflow: hidden;
+}
+
+.cart-group-progress-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #3b82f6, #22c55e);
+}
+
+.cart-group.done .cart-group-progress-bar {
+    background: #16a34a;
+}
+
+.cart-course {
+    margin: 9px;
+    padding: 9px;
+    border-radius: 12px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    font-size: 11px;
+    color: #475569;
+}
+
+.cart-course-name {
+    font-weight: 800;
+    color: #1e293b;
+    margin-bottom: 5px;
+    line-height: 1.35;
+}
+
+.cart-course-meta {
+    line-height: 1.55;
+}
+
+.cart-course-footer {
+    margin-top: 7px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cart-credit-badge {
+    font-size: 10px;
+    background: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid #bfdbfe;
+    padding: 2px 6px;
+    border-radius: 999px;
+}
+
+.cart-remove {
+    font-size: 10px;
+    color: white;
+    background: var(--danger);
+    cursor: pointer;
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 999px;
+}
+
+.empty-cart {
+    color: #94a3b8;
+    text-align: center;
+    font-size: 12px;
+    padding: 24px 0;
+    background: #f8fafc;
+    border-radius: 14px;
+    border: 1px dashed #cbd5e1;
+}
+
         @media screen and (max-width: 1024px) {
             body { 
                 flex-direction: column; 
@@ -479,7 +874,8 @@
             .db-item { 
                 margin-bottom: 0; 
                 flex-shrink: 0; 
-                padding: 8px 16px; 
+                padding: 8px 12px; 
+                min-width: 150px;
             }
 
             .sidebar-footer { 
@@ -525,10 +921,38 @@
                 bottom: 10px;
                 width: auto;
                 padding: 9px 11px;
+                z-index: 900;
             }
 
             .floating-countdown-meta {
                 display: none;
+            }
+
+            .cart-panel {
+    left: 10px;
+    right: 10px;
+    bottom: 62px;
+    width: auto;
+    max-height: 46vh;
+    border-radius: 18px;
+}
+
+.cart-panel.collapsed {
+    width: auto;
+    max-height: 54px;
+}
+
+.cart-body {
+    max-height: calc(46vh - 54px);
+}
+
+            .group-credit-panel {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .group-credit-info {
+                text-align: left;
             }
         }
     </style>
@@ -542,8 +966,12 @@
     </div>
     <div id="menu" class="db-list"></div>
     <div class="sidebar-footer">
+        <b>💡 自动标签</b><br>
+        系统会自动识别课程名最后括号内的内容生成筛选标签。<br><br>
         <b>🚫 排除矩阵</b><br>
         点击矩阵格子可屏蔽对应时段。<br><br>
+        <b>🛒 选课购物车</b><br>
+        添加课程后会自动计算学分，并禁用其他组冲突时间。
     </div>
 </div>
 
@@ -551,11 +979,13 @@
     <div id="banner" class="banner"></div>
     
     <div class="header-tools">
+        <div id="groupCreditPanel" class="group-credit-panel"></div>
+
         <input type="text" id="locateSearch" class="locate-input" placeholder="🔍 输入课程、教师名实时筛选..." oninput="handleSearch()">
         
         <div class="exclusion-panel">
             <div class="exclusion-label">
-                <span>🚫 时段排除，红色为屏蔽</span>
+                <span>🚫 时段排除，红色为屏蔽；紫色为其他组已占用</span>
                 <span style="font-size:9px; font-weight:normal; cursor:pointer; color:#3b82f6" onclick="resetExclusion()">↺ 重置</span>
             </div>
             <div class="matrix-container" id="matrixContainer"></div>
@@ -577,7 +1007,6 @@
     <div id="courseList" class="course-list"></div>
 </div>
 
-<!-- 悬浮倒计时：不放在 content 里，所以不会挤压课程表 -->
 <div id="floatingCountdown" class="floating-countdown">
     <div class="floating-countdown-top">
         <div id="countdownTitle" class="floating-countdown-title">⏳ 选课时间</div>
@@ -589,15 +1018,30 @@
     </div>
 </div>
 
+<div id="cartPanel" class="cart-panel collapsed">
+    <div class="cart-header" onclick="toggleCart()">
+        <div class="cart-header-left">
+            <div class="cart-icon">🛒</div>
+            <div class="cart-title-main">
+                我的选择 <span id="cartCount" class="cart-count">0</span>
+                <div class="cart-title-sub" id="cartHeaderSub">点击展开查看</div>
+            </div>
+        </div>
+        <div id="cartToggleIcon" class="cart-toggle">展开</div>
+    </div>
+    <div id="cartBody" class="cart-body"></div>
+</div>
+
 <script>
 // ================== 课程数据 ==================
-// 每个课程组都可以单独设置 startTime 和 endTime
-// 时间格式建议：YYYY-MM-DD HH:mm
+// requiredCredits：该课程组需要选择多少学分
+// credit：单门课程学分，不写默认 1
 const DATA_STORE = {
     "26-27技能选修课": {
         "notice": "<b>提醒：</b>该工具仅对选课进行梳理，方便校对自己课表，请根据自己实际需求，老师要求进行选择课程，选择课程后记得去学校教学系统确认要求，二次确认。",
         "startTime": "2026-06-01 12:00",
         "endTime": "2026-06-03 12:00",
+        "requiredCredits": 2,
         "courses": [
   {"n":"德语入门(1班) (语言技能类)","t":"王玥巍","s":"周二7-8节(每周)(待定)(1-16周)","d":1,"b":7,"e":8,"raw":["德语入门(1班) (语言技能类)","2","1-16","王玥巍","周二7-8节(每周)(待定)(1-16周)","40"]},
   {"n":"德语入门(2班) (语言技能类)","t":"王玥巍","s":"周四7-8节(每周)(待定)(1-16周)","d":3,"b":7,"e":8,"raw":["德语入门(2班) (语言技能类)","2","1-16","王玥巍","周四7-8节(每周)(待定)(1-16周)","40"]},
@@ -720,6 +1164,7 @@ const DATA_STORE = {
         "notice": "<b>提醒：</b>该工具仅对选课进行梳理，方便校对自己课表，请根据自己实际需求，老师要求进行选择课程，选择课程后记得去学校教学系统确认要求，二次确认。",
      "startTime": "2026-06-01 12:00",
         "endTime": "2026-06-03 12:00",
+                "requiredCredits": 7,
         "courses": [
   {"n":"AIGC创意设计","t":"梁逸晟","s":"周四3-4节(每周)(主1#509)(1-16周)","d":3,"b":3,"e":4,"raw":["AIGC创意设计","2","1-16","梁逸晟","周四3-4节(每周)(主1#509)(1-16周)","25"]},
   {"n":"AIGC影视美术","t":"张睿煦","s":"周一5-6节(每周)(主1#402)(1-16周)","d":0,"b":5,"e":6,"raw":["AIGC影视美术","2","1-16","张睿煦","周一5-6节(每周)(主1#402)(1-16周)","30"]},
@@ -781,6 +1226,7 @@ const DATA_STORE = {
         "notice": "<b>提醒：</b>非必须修读/有意者可选/认技选",
      "startTime": "2026-06-01 12:00",
         "endTime": "2026-06-03 12:00",
+        "requiredCredits": 4,
         "courses": [
   {"n":"TRIZ创新理论与实践 (职业技能类-职业技能类)","t":"江思华","s":"周五1-2节(每周)(待定)(1-16周)","d":4,"b":1,"e":2,"raw":["TRIZ创新理论与实践 (职业技能类-职业技能类)","2","1-16","江思华","周五1-2节(每周)(待定)(1-16周)","40"]},
   {"n":"创新创业案例研究(1班) (职业技能类-职业技能类)","t":"林雪治","s":"周三7-8节(每周)(待定)(1-16周)","d":2,"b":7,"e":8,"raw":["创新创业案例研究(1班) (职业技能类-职业技能类)","2","1-16","林雪治","周三7-8节(每周)(待定)(1-16周)","40"]},
@@ -822,7 +1268,6 @@ const DATA_STORE = {
 
 const DAYS = ['周一', '周二', '周三', '周四', '周五'];
 
-// 课程表节次：晚上只保留 9-10
 const SLOT_ROWS = [
     { label: '1-2', start: 1, end: 2 },
     { label: '3-4', start: 3, end: 4 },
@@ -834,44 +1279,132 @@ const SLOT_ROWS = [
 let currentPool = [];    
 let currentSubTag = '全部'; 
 let currentKeyword = '';
-
-// 现在是 5 天 × 5 个具体节次段
-// 分别对应：1-2、3-4、5-6、7-8、9-10
 let excludedMatrix = Array(5).fill(null).map(() => Array(SLOT_ROWS.length).fill(false));
 
 let currentGroupName = '';
 let countdownTimer = null;
 
+// 选课购物车数据，格式：
+// selectedMap["课程组名称"] = [课程对象, 课程对象]
+let selectedMap = {};
+
 function init() {
+    prepareCourseIds();
+    initSelectedMap();
+    renderMenu();
     renderMatrixControl();
     renderGrid();
     
-    const menu = document.getElementById('menu');
-
-    Object.keys(DATA_STORE).forEach((key, index) => {
-        const item = document.createElement('div');
-        item.className = 'db-item' + (index === 0 ? ' active' : '');
-        item.innerText = key;
-
-        item.onclick = () => {
-            document.querySelectorAll('.db-item').forEach(i => i.classList.remove('active'));
-            item.classList.add('active');
-            switchGroup(key);
-        };
-
-        menu.appendChild(item);
-
-        if (index === 0) {
-            switchGroup(key);
-        }
-    });
+    const firstKey = Object.keys(DATA_STORE)[0];
+    if (firstKey) {
+        switchGroup(firstKey);
+    }
 
     if (window.innerWidth <= 1024) {
         document.getElementById('mobile-hint').style.display = 'inline';
     }
+
+    updateCart();
 }
 
-// ================== 倒计时相关 ==================
+// 把各种格式的学分转成数字
+function normalizeCredit(value) {
+    if (value === undefined || value === null || value === '') {
+        return 1;
+    }
+
+    const num = Number(value);
+
+    if (Number.isNaN(num) || num <= 0) {
+        return 1;
+    }
+
+    return num;
+}
+
+// 从课程对象里读取学分
+function readCourseCredit(course) {
+    // 优先使用显式 credit 字段
+    if (course.credit !== undefined && course.credit !== null && course.credit !== '') {
+        return normalizeCredit(course.credit);
+    }
+
+    // 你的数据里 raw[1] 是学分，例如 raw:["课程名","2","1-16",...]
+    if (course.raw && course.raw.length > 1) {
+        return normalizeCredit(course.raw[1]);
+    }
+
+    // 如果以后你有 xf 字段，也可以兼容
+    if (course.xf !== undefined) {
+        return normalizeCredit(course.xf);
+    }
+
+    return 1;
+}
+
+// 给每门课生成唯一 id，并自动补全 credit
+function prepareCourseIds() {
+    Object.keys(DATA_STORE).forEach(groupName => {
+        const courses = DATA_STORE[groupName].courses || [];
+
+        courses.forEach((course, index) => {
+            course._id = `${groupName}__${index}`;
+            course.credit = readCourseCredit(course);
+        });
+    });
+}
+
+function initSelectedMap() {
+    Object.keys(DATA_STORE).forEach(groupName => {
+        if (!selectedMap[groupName]) {
+            selectedMap[groupName] = [];
+        }
+    });
+}
+
+// ================== 左侧课程组列表 ==================
+function renderMenu() {
+    const menu = document.getElementById('menu');
+    menu.innerHTML = '';
+
+    Object.keys(DATA_STORE).forEach((key) => {
+        const group = DATA_STORE[key];
+        const required = getRequiredCredits(key);
+        const selectedCredits = getSelectedCredits(key);
+        const remain = Math.max(0, required - selectedCredits);
+
+        const item = document.createElement('div');
+        item.className = 'db-item';
+
+        if (key === currentGroupName) {
+            item.classList.add('active');
+        }
+
+        if (selectedCredits === required && required > 0) {
+            item.classList.add('done');
+        }
+
+        if (selectedCredits > required) {
+            item.classList.add('over');
+        }
+
+        item.innerHTML = `
+            <div class="db-item-main">
+                <span class="db-item-title">${key}</span>
+                <span class="db-item-credit">${selectedCredits}/${required}学分</span>
+            </div>
+            <div class="db-item-tip">${remain > 0 ? `还需 ${remain} 学分` : '已满足'}</div>
+        `;
+
+        item.onclick = () => {
+            switchGroup(key);
+        };
+
+        menu.appendChild(item);
+    });
+}
+
+// ================== 倒计时 ==================
 function parseDateTime(str) {
     if (!str) return null;
     return new Date(str.replace(/-/g, '/'));
@@ -937,12 +1470,9 @@ function updateCountdown() {
     meta.innerText = `开始：${group.startTime}　结束：${group.endTime}`;
 
     if (now < start) {
-        const remainToStart = start - now;
-
         panel.classList.add('waiting');
         title.innerText = '⏳ 距开始';
-        time.innerText = formatDuration(remainToStart);
-
+        time.innerText = formatDuration(start - now);
         bar.style.width = '0%';
         bar.style.background = 'linear-gradient(90deg, #f59e0b, #f97316)';
         return;
@@ -952,7 +1482,6 @@ function updateCountdown() {
         panel.classList.add('ended');
         title.innerText = '✅ 已结束';
         time.innerText = '00天 00小时 00分 00秒';
-
         bar.style.width = '0%';
         bar.style.background = '#94a3b8';
         return;
@@ -965,7 +1494,6 @@ function updateCountdown() {
     panel.classList.add('running');
     title.innerText = '🔥 距结束';
     time.innerText = formatDuration(remain);
-
     bar.style.width = remainPercent + '%';
 
     if (remainPercent > 60) {
@@ -989,7 +1517,226 @@ function startCountdown() {
     }, 1000);
 }
 
-// ================== 屏蔽矩阵相关 ==================
+// ================== 学分与选课逻辑 ==================
+function getRequiredCredits(groupName) {
+    const group = DATA_STORE[groupName];
+    return Number(group && group.requiredCredits ? group.requiredCredits : 0);
+}
+
+function getSelectedCredits(groupName) {
+    const list = selectedMap[groupName] || [];
+    return list.reduce((sum, c) => sum + Number(c.credit || 1), 0);
+}
+
+function getSelectedCount(groupName) {
+    return (selectedMap[groupName] || []).length;
+}
+
+function getCourseCredit(course) {
+    return normalizeCredit(course.credit !== undefined ? course.credit : readCourseCredit(course));
+}
+
+function isSelected(course) {
+    const list = selectedMap[currentGroupName] || [];
+    return list.some(c => c._id === course._id);
+}
+
+function isSelectedInAnyGroup(course) {
+    return Object.keys(selectedMap).some(groupName => {
+        return selectedMap[groupName].some(c => c._id === course._id);
+    });
+}
+
+function timeOverlap(a, b) {
+    if (a.d !== b.d) return false;
+    return a.b <= b.e && a.e >= b.b;
+}
+
+// 判断是否和其他课程组已选课程冲突
+function hasConflictWithOtherGroups(course) {
+    for (const groupName of Object.keys(selectedMap)) {
+        if (groupName === currentGroupName) continue;
+
+        const list = selectedMap[groupName] || [];
+
+        for (const selected of list) {
+            if (timeOverlap(course, selected)) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+// 判断是否和本组已选课程冲突
+function hasConflictInCurrentGroup(course) {
+    const list = selectedMap[currentGroupName] || [];
+
+    for (const selected of list) {
+        if (selected._id !== course._id && timeOverlap(course, selected)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+function canAddCourse(course) {
+    if (isSelected(course)) {
+        return {
+            ok: false,
+            reason: '已选择'
+        };
+    }
+
+    if (hasConflictWithOtherGroups(course)) {
+        return {
+            ok: false,
+            reason: '与其他组已选课程时间冲突'
+        };
+    }
+
+    if (hasConflictInCurrentGroup(course)) {
+        return {
+            ok: false,
+            reason: '与本组已选课程时间冲突'
+        };
+    }
+
+    const required = getRequiredCredits(currentGroupName);
+    const selectedCredits = getSelectedCredits(currentGroupName);
+    const courseCredit = getCourseCredit(course);
+
+    if (required > 0 && selectedCredits + courseCredit > required) {
+        return {
+            ok: false,
+            reason: '超过该组要求学分，不能超选'
+        };
+    }
+
+    return {
+        ok: true,
+        reason: ''
+    };
+}
+
+function addCourse(courseId) {
+    const course = currentPool.find(c => c._id === courseId);
+    if (!course) return;
+
+    const result = canAddCourse(course);
+
+    if (!result.ok) {
+        alert(result.reason);
+        return;
+    }
+
+    selectedMap[currentGroupName].push(course);
+
+    updateAllViews();
+}
+
+function removeCourse(groupName, courseId) {
+    selectedMap[groupName] = (selectedMap[groupName] || []).filter(c => c._id !== courseId);
+
+    updateAllViews();
+}
+
+function updateAllViews() {
+    renderMenu();
+    renderGroupCreditPanel();
+    renderMatrixControl();
+    handleSearch();
+    updateCart();
+}
+
+// ================== 购物车 ==================
+function toggleCart() {
+    const panel = document.getElementById('cartPanel');
+    const icon = document.getElementById('cartToggleIcon');
+
+    panel.classList.toggle('collapsed');
+
+    icon.innerText = panel.classList.contains('collapsed') ? '展开' : '折叠';
+}
+
+function getTotalSelectedCourses() {
+    return Object.keys(selectedMap).reduce((sum, groupName) => {
+        return sum + selectedMap[groupName].length;
+    }, 0);
+}
+
+function getTotalSelectedCredits() {
+    return Object.keys(selectedMap).reduce((sum, groupName) => {
+        return sum + getSelectedCredits(groupName);
+    }, 0);
+}
+
+function getTotalRequiredCredits() {
+    return Object.keys(DATA_STORE).reduce((sum, groupName) => {
+        return sum + getRequiredCredits(groupName);
+    }, 0);
+}
+
+function updateCart() {
+    const countEl = document.getElementById('cartCount');
+    const body = document.getElementById('cartBody');
+
+    const totalCourses = getTotalSelectedCourses();
+    const totalCredits = getTotalSelectedCredits();
+    const totalRequired = getTotalRequiredCredits();
+
+    countEl.innerText = totalCourses;
+
+    let html = `
+        <div class="cart-summary">
+            已选课程：<b>${totalCourses}</b> 门<br>
+            已选学分：<b>${totalCredits}</b> / ${totalRequired} 学分
+        </div>
+    `;
+
+    if (totalCourses === 0) {
+        html += `<div class="empty-cart">还没有选择课程</div>`;
+        body.innerHTML = html;
+        return;
+    }
+
+    Object.keys(DATA_STORE).forEach(groupName => {
+        const list = selectedMap[groupName] || [];
+        const required = getRequiredCredits(groupName);
+        const credits = getSelectedCredits(groupName);
+
+        html += `
+            <div class="cart-group">
+                <div class="cart-group-title">
+                    <span>${groupName}</span>
+                    <span>${credits}/${required}</span>
+                </div>
+        `;
+
+        if (list.length === 0) {
+            html += `<div class="cart-course" style="color:#94a3b8;">暂未选择</div>`;
+        } else {
+            list.forEach(c => {
+                html += `
+                    <div class="cart-course">
+                        <div class="cart-course-name">${c.n}</div>
+                        <div>👤 ${c.t || '未知'}　⏰ ${c.s || '见系统'}</div>
+                        <div>学分：${getCourseCredit(c)}</div>
+                        <span class="cart-remove" onclick="removeCourse('${groupName}', '${c._id}')">移除</span>
+                    </div>
+                `;
+            });
+        }
+
+        html += `</div>`;
+    });
+
+    body.innerHTML = html;
+}
+
+// ================== 屏蔽矩阵 ==================
 function getSlotIndexByPeriod(period) {
     if (period >= 1 && period <= 2) return 0;
     if (period >= 3 && period <= 4) return 1;
@@ -1018,6 +1765,34 @@ function isCourseExcluded(course) {
 
 function isSlotExcluded(dayIdx, slotIdx) {
     return excludedMatrix[dayIdx][slotIdx];
+}
+
+function isSlotConflictWithOtherGroups(dayIdx, slot) {
+    for (const groupName of Object.keys(selectedMap)) {
+        if (groupName === currentGroupName) continue;
+
+        const list = selectedMap[groupName] || [];
+
+        for (const c of list) {
+            if (c.d === dayIdx && c.b <= slot.end && c.e >= slot.start) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+function isSlotSelectedInCurrentGroup(dayIdx, slot) {
+    const list = selectedMap[currentGroupName] || [];
+
+    for (const c of list) {
+        if (c.d === dayIdx && c.b <= slot.end && c.e >= slot.start) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 function renderMatrixControl() {
@@ -1081,7 +1856,7 @@ function resetExclusion() {
     handleSearch();
 }
 
-// ================== 渲染主网格 ==================
+// ================== 主课程表 ==================
 function renderGrid() {
     const grid = document.getElementById('grid');
 
@@ -1119,6 +1894,8 @@ function switchGroup(groupName) {
             c.subCategory = "其他";
         }
 
+c.credit = readCourseCredit(c);
+
         subTags.add(c.subCategory);
     });
 
@@ -1141,8 +1918,60 @@ function switchGroup(groupName) {
     });
 
     document.getElementById('locateSearch').value = '';
+
+    renderMenu();
+    renderGroupCreditPanel();
     handleSearch();
 }
+
+function getMaxAvailableCreditInCurrentGroup() {
+    const credits = currentPool
+        .filter(c => {
+            if (isSelected(c)) return false;
+            if (hasConflictWithOtherGroups(c)) return false;
+            if (hasConflictInCurrentGroup(c)) return false;
+            if (isCourseExcluded(c)) return false;
+            return true;
+        })
+        .map(c => getCourseCredit(c));
+
+    if (credits.length === 0) return 1;
+
+    return Math.max(...credits);
+}
+
+function renderGroupCreditPanel() {
+    const panel = document.getElementById('groupCreditPanel');
+    const required = getRequiredCredits(currentGroupName);
+    const selectedCredits = getSelectedCredits(currentGroupName);
+    const selectedCount = getSelectedCount(currentGroupName);
+    const remain = Math.max(0, required - selectedCredits);
+
+    const maxAvailableCredit = getMaxAvailableCreditInCurrentGroup();
+    const estimateCount = remain > 0 ? Math.ceil(remain / maxAvailableCredit) : 0;
+
+    let statusText = '';
+
+    if (remain > 0) {
+        statusText = `还差 <strong>${remain}</strong> 学分，至少还需要约 <strong>${estimateCount}</strong> 门`;
+    } else {
+        statusText = `<strong>已满足要求</strong>`;
+    }
+
+    panel.innerHTML = `
+        <div>
+            <div class="group-credit-title">🎯 当前组学分要求：${required} 学分</div>
+            <div style="font-size:11px; color:#94a3b8; margin-top:4px;">
+                课程学分已自动从 raw[1] 读取，例如 raw[1] = 2 表示 2 学分
+            </div>
+        </div>
+        <div class="group-credit-info ${remain === 0 ? 'done' : ''}">
+            已选 <strong>${selectedCredits}</strong> 学分，${selectedCount} 门<br>
+            ${statusText}
+        </div>
+    `;
+}
+
 
 function getHeatColor(count, isSearch) {
     if (count === 0) return '#f8fafc';
@@ -1162,8 +1991,8 @@ function getBigSlotIndexByCourse(course) {
 function handleSearch() {
     currentKeyword = document.getElementById('locateSearch').value.trim().toLowerCase();
     const inputEl = document.getElementById('locateSearch');
-    
-    const filteredList = currentPool.filter(c => {
+
+    const visibleList = currentPool.filter(c => {
         if (isCourseExcluded(c)) return false;
 
         const matchTag = currentSubTag === '全部' || c.subCategory === currentSubTag;
@@ -1183,33 +2012,80 @@ function handleSearch() {
 
     SLOT_ROWS.forEach((slot, slotIdx) => {
         for (let d = 0; d < 5; d++) {
-            if (isSlotExcluded(d, slotIdx)) {
-                const el = document.getElementById(`cell-${d}-${slotIdx}`);
+            const el = document.getElementById(`cell-${d}-${slotIdx}`);
 
-                if (el) {
-                    el.classList.add('excluded-slot');
-                }
+            if (!el) continue;
+
+            if (isSlotExcluded(d, slotIdx)) {
+                el.classList.add('excluded-slot');
+                continue;
+            }
+
+            if (isSlotConflictWithOtherGroups(d, slot)) {
+                el.classList.add('conflict-slot');
+                el.innerHTML = `<span style="font-size:16px; font-weight:800">禁</span><span style="font-size:9px;">冲突</span>`;
+                continue;
+            }
+
+            if (isSlotSelectedInCurrentGroup(d, slot)) {
+                el.classList.add('selected-slot');
+                el.innerHTML = `<span style="font-size:16px; font-weight:800">已</span><span style="font-size:9px;">选择</span>`;
             }
         }
     });
 
     const counts = {};
 
-    filteredList.forEach(c => {
+    visibleList.forEach(c => {
         const slotIdx = getBigSlotIndexByCourse(c);
 
         if (slotIdx === -1) return;
 
         const key = `${c.d}-${slotIdx}`;
-        counts[key] = (counts[key] || 0) + 1;
+
+        if (!counts[key]) {
+            counts[key] = {
+                total: 0,
+                available: 0,
+                conflict: 0
+            };
+        }
+
+        counts[key].total++;
+
+        if (hasConflictWithOtherGroups(c)) {
+            counts[key].conflict++;
+        } else {
+            counts[key].available++;
+        }
     });
 
     Object.keys(counts).forEach(k => {
         const el = document.getElementById(`cell-${k}`);
 
-        if (el && !el.classList.contains('excluded-slot')) {
-            const n = counts[k];
+        if (!el || el.classList.contains('excluded-slot')) return;
 
+        const data = counts[k];
+
+        if (el.classList.contains('conflict-slot')) {
+            el.innerHTML = `
+                <span style="font-size:16px; font-weight:800">${data.total}</span>
+                <span style="font-size:9px;">冲突禁用</span>
+            `;
+            return;
+        }
+
+        if (el.classList.contains('selected-slot')) {
+            el.innerHTML = `
+                <span style="font-size:16px; font-weight:800">${data.total}</span>
+                <span style="font-size:9px;">含已选</span>
+            `;
+            return;
+        }
+
+        const n = data.total;
+
+        if (n > 0) {
             el.innerHTML = `
                 <span style="font-size:16px; font-weight:800">${n}</span>
                 <span style="font-size:9px; opacity:0.8">门</span>
@@ -1226,7 +2102,7 @@ function handleSearch() {
         }
     });
     
-    renderList(currentKeyword ? filteredList : null);
+    renderList(currentKeyword ? visibleList : null);
 }
 
 function showSlotDetail(d, slotIdx) {
@@ -1273,7 +2149,7 @@ function renderList(list, isManual = false) {
     
     if (!list && !isManual) {
         titleEl.innerText = "💡 课程详情";
-        container.innerHTML = '<div style="color:#94a3b8; text-align:center; margin-top:50px; font-size:12px;">点击格子查看时段课程</div>';
+        container.innerHTML = '<div style="color:#94a3b8; text-align:center; margin-top:50px; font-size:12px;">点击格子查看时段课程，或搜索课程</div>';
         return;
     }
 
@@ -1281,22 +2157,49 @@ function renderList(list, isManual = false) {
     container.innerHTML = '';
 
     if (!list || list.length === 0) {
-        container.innerHTML = '<div style="color:#f43f5e; text-align:center; margin-top:50px; font-size:12px;">该时段暂无匹配课程</div>';
+        container.innerHTML = '<div style="color:#f43f5e; text-align:center; margin-top:50px; font-size:12px;">暂无匹配课程</div>';
         return;
     }
 
     list.forEach(c => {
         const card = document.createElement('div');
+
+        const selected = isSelected(c);
+        const otherConflict = hasConflictWithOtherGroups(c);
+        const currentConflict = hasConflictInCurrentGroup(c);
+        const addInfo = canAddCourse(c);
+
         card.className = 'course-card';
+
+        if (selected) {
+            card.classList.add('selected');
+        } else if (otherConflict) {
+            card.classList.add('conflict');
+        }
+
+        let buttonHtml = '';
+
+        if (selected) {
+            buttonHtml = `<button class="select-btn remove" onclick="removeCourse('${currentGroupName}', '${c._id}')">移除已选</button>`;
+        } else if (otherConflict) {
+            buttonHtml = `<button class="select-btn conflict disabled" onclick="alert('与其他课程组已选课程时间冲突，不能选择')">紫色禁用：时间冲突</button>`;
+        } else if (currentConflict) {
+            buttonHtml = `<button class="select-btn disabled" onclick="alert('与本组已选课程时间冲突，不能选择')">本组时间冲突</button>`;
+        } else if (!addInfo.ok) {
+            buttonHtml = `<button class="select-btn disabled" onclick="alert('${addInfo.reason}')">${addInfo.reason}</button>`;
+        } else {
+            buttonHtml = `<button class="select-btn" onclick="addCourse('${c._id}')">加入选择 +${getCourseCredit(c)}学分</button>`;
+        }
 
         card.innerHTML = `
             <div class="card-head">${c.n}</div>
             <div class="card-body">
                 <div>👤 教师：${c.t || '未知'}</div>
                 <div>⏰ 时间：${c.s || '见系统'}</div>
-                <div style="margin-top:4px; font-size:10px; color:#94a3b8; border:1px solid #e2e8f0; display:inline-block; padding:0 4px; border-radius:4px;">
-                    ${c.subCategory || '其他'}
-                </div>
+                <div>🎓 学分：${getCourseCredit(c)}</div>
+                <div class="small-badge">${c.subCategory || '其他'}</div>
+                ${otherConflict ? `<div style="margin-top:6px;color:${getComputedStyle(document.documentElement).getPropertyValue('--purple')};font-weight:700;">⚠️ 与其他组已选课程时间冲突</div>` : ''}
+                <div class="card-actions">${buttonHtml}</div>
             </div>
         `;
 
