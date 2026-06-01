@@ -3,13 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>选课辅助系统 - 支持单双周</title>
+<title>选课辅助系统 - 25广告1班</title>
 
 <style>
 :root {
     --sidebar-bg: #1e293b;
     --main-bg: #f1f5f9;
     --primary: #3b82f6;
+    --primary-dark: #2563eb;
     --border: #e2e8f0;
     --accent: #f43f5e;
     --highlight: #f59e0b;
@@ -23,13 +24,18 @@
     --excluded-bg: #e2e8f0;
     --excluded-stripe: #cbd5e1;
     --card-shadow: 0 4px 6px -1px rgba(0,0,0,.1);
+    --card-shadow-strong: 0 14px 30px rgba(15,23,42,.12);
+}
+
+* {
+    box-sizing: border-box;
 }
 
 body, html {
     height: 100vh;
     margin: 0;
     padding: 0;
-    font-family: "SF Pro Display", "PingFang SC", sans-serif;
+    font-family: "SF Pro Display", "PingFang SC", "Microsoft YaHei", sans-serif;
 }
 
 body {
@@ -71,8 +77,14 @@ body {
     transition: .2s;
 }
 
+.db-item:hover {
+    transform: translateY(-1px);
+    background: #475569;
+}
+
 .db-item.active {
-    background: var(--primary);
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    box-shadow: 0 8px 18px rgba(37,99,235,.35);
 }
 
 .db-item-main {
@@ -125,7 +137,6 @@ body {
     padding: 15px 20px;
     min-width: 0;
     height: 100vh;
-    box-sizing: border-box;
     overflow-y: auto;
 }
 
@@ -181,7 +192,6 @@ body {
     font-size: 14px;
     outline: none;
     box-shadow: var(--card-shadow);
-    box-sizing: border-box;
 }
 
 .locate-input.searching {
@@ -201,6 +211,13 @@ body {
     cursor: pointer;
     font-size: 12px;
     color: #64748b;
+    transition: .2s;
+    border: 1px solid transparent;
+}
+
+.tag-chip:hover {
+    border-color: #bfdbfe;
+    color: var(--primary);
 }
 
 .tag-chip.active {
@@ -343,9 +360,11 @@ body {
     color: var(--success) !important;
 }
 
+/* ================== 右侧面板美化 ================== */
+
 .side-panel {
-    width: 320px;
-    background: white;
+    width: 360px;
+    background: linear-gradient(180deg, #ffffff, #f8fafc);
     border-left: 1px solid var(--border);
     display: flex;
     flex-direction: column;
@@ -355,73 +374,209 @@ body {
 .panel-header {
     padding: 20px;
     border-bottom: 1px solid var(--border);
+    background:
+        radial-gradient(circle at top left, rgba(59,130,246,.14), transparent 35%),
+        linear-gradient(135deg, #ffffff, #f8fafc);
+}
+
+.panel-title-main {
+    font-size: 17px;
+    font-weight: 900;
+}
+
+.panel-subtitle {
+    font-size: 11px;
+    color: #94a3b8;
+    margin-top: 5px;
 }
 
 .course-list {
     flex: 1;
     overflow-y: auto;
-    padding: 15px;
+    padding: 16px;
 }
 
 .course-card {
-    background: white;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    margin-bottom: 12px;
+    position: relative;
+    background: rgba(255,255,255,.96);
+    border: 1px solid rgba(226,232,240,.95);
+    border-radius: 18px;
+    margin-bottom: 16px;
     overflow: hidden;
+    box-shadow: 0 8px 22px rgba(15,23,42,.08);
+    transition: .22s ease;
+}
+
+.course-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--card-shadow-strong);
+    border-color: #bfdbfe;
 }
 
 .course-card.selected {
     border-color: #86efac;
-    background: #f0fdf4;
+    background: linear-gradient(180deg, #f0fdf4, #ffffff);
 }
 
 .course-card.conflict {
     border-color: var(--purple-border);
-    background: var(--purple-light);
-    opacity: .9;
+    background: linear-gradient(180deg, #f5f3ff, #ffffff);
+    opacity: .96;
 }
 
 .card-head {
-    padding: 12px;
-    font-weight: 700;
-    font-size: 13px;
-    background: #fcfcfc;
+    padding: 14px 14px 12px;
+    background:
+        linear-gradient(135deg, rgba(59,130,246,.10), rgba(14,165,233,.04)),
+        #ffffff;
+    border-bottom: 1px solid #eef2f7;
+}
+
+.course-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.course-title {
+    font-weight: 900;
+    font-size: 14px;
+    line-height: 1.45;
+    color: #0f172a;
+}
+
+.capacity-pill {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 9px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 900;
+    border: 1px solid transparent;
+    white-space: nowrap;
+}
+
+.capacity-hard {
+    color: #be123c;
+    background: #ffe4e6;
+    border-color: #fda4af;
+}
+
+.capacity-tight {
+    color: #b45309;
+    background: #fef3c7;
+    border-color: #fde68a;
+}
+
+.capacity-mid {
+    color: #0369a1;
+    background: #e0f2fe;
+    border-color: #bae6fd;
+}
+
+.capacity-easy {
+    color: #15803d;
+    background: #dcfce7;
+    border-color: #bbf7d0;
+}
+
+.capacity-unknown {
+    color: #64748b;
+    background: #f1f5f9;
+    border-color: #e2e8f0;
+}
+
+.card-badges {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
 }
 
 .card-body {
-    padding: 12px;
+    padding: 13px 14px 14px;
     font-size: 12px;
     color: #64748b;
-    border-top: 1px dashed var(--border);
     line-height: 1.7;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.info-item {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 8px 9px;
+    min-width: 0;
+}
+
+.info-label {
+    color: #94a3b8;
+    font-size: 10px;
+    margin-bottom: 2px;
+}
+
+.info-value {
+    color: #334155;
+    font-size: 12px;
+    font-weight: 800;
+    overflow-wrap: anywhere;
+}
+
+.info-item.full {
+    grid-column: 1 / -1;
+}
+
+.difficulty-line {
+    margin-top: 8px;
+    padding: 8px 10px;
+    border-radius: 12px;
+    background: #fff7ed;
+    color: #9a3412;
+    font-weight: 800;
+    border: 1px solid #fed7aa;
 }
 
 .card-actions {
     display: flex;
     gap: 8px;
-    margin-top: 10px;
+    margin-top: 12px;
 }
 
 .select-btn {
     border: none;
-    border-radius: 8px;
-    padding: 7px 10px;
+    border-radius: 12px;
+    padding: 9px 10px;
     font-size: 12px;
     cursor: pointer;
-    background: var(--primary);
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
     color: white;
-    font-weight: 800;
+    font-weight: 900;
     flex: 1;
+    box-shadow: 0 8px 16px rgba(37,99,235,.24);
+}
+
+.select-btn:hover {
+    filter: brightness(1.05);
 }
 
 .select-btn.remove {
-    background: var(--danger);
+    background: linear-gradient(135deg, #f43f5e, #e11d48);
+    box-shadow: 0 8px 16px rgba(225,29,72,.22);
 }
 
 .select-btn.disabled {
     background: #94a3b8;
     cursor: not-allowed;
+    box-shadow: none;
 }
 
 .select-btn.conflict {
@@ -429,21 +584,20 @@ body {
 }
 
 .small-badge {
-    margin-top: 4px;
     font-size: 10px;
-    color: #94a3b8;
+    color: #475569;
     border: 1px solid #e2e8f0;
     display: inline-block;
-    padding: 0 5px;
-    border-radius: 4px;
+    padding: 2px 7px;
+    border-radius: 999px;
+    background: #f8fafc;
 }
 
 .week-badge {
-    margin-left: 5px;
     font-size: 10px;
-    padding: 1px 6px;
+    padding: 2px 7px;
     border-radius: 999px;
-    font-weight: 800;
+    font-weight: 900;
 }
 
 .week-all {
@@ -461,10 +615,12 @@ body {
     color: #6d28d9;
 }
 
+/* ================== 倒计时 ================== */
+
 .floating-countdown {
     position: fixed;
     top: 12px;
-    right: 340px;
+    right: 380px;
     width: 300px;
     background: rgba(255,255,255,.96);
     backdrop-filter: blur(10px);
@@ -473,7 +629,6 @@ body {
     box-shadow: 0 8px 24px rgba(15,23,42,.16);
     z-index: 999;
     padding: 10px 12px;
-    box-sizing: border-box;
     font-size: 12px;
 }
 
@@ -517,6 +672,8 @@ body {
     border-radius: 999px;
     background: linear-gradient(90deg,#22c55e,#3b82f6);
 }
+
+/* ================== 购物车 ================== */
 
 .cart-panel {
     position: fixed;
@@ -758,6 +915,10 @@ body {
     .group-credit-info {
         text-align: left;
     }
+
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
 }
 </style>
 </head>
@@ -773,7 +934,8 @@ body {
     <div class="sidebar-footer">
         <b>🚫 排除矩阵</b><br>
         点击矩阵格子可屏蔽对应时段。<br>
-        已支持单周 / 双周冲突判断。
+        已支持单周 / 双周冲突判断。<br>
+        已显示限选人数，方便判断抢课难度。
     </div>
 </div>
 
@@ -806,8 +968,8 @@ body {
 
 <div class="side-panel">
     <div class="panel-header">
-        <div id="panelTitle" style="font-size:16px;font-weight:800;">💡 课程详情</div>
-        <div id="slotInfo" style="font-size:11px;color:#94a3b8;margin-top:4px;">点击格子查看列表</div>
+        <div id="panelTitle" class="panel-title-main">💡 课程详情</div>
+        <div id="slotInfo" class="panel-subtitle">点击格子查看列表</div>
     </div>
     <div id="courseList" class="course-list"></div>
 </div>
@@ -839,13 +1001,24 @@ body {
 
 <script>
 // ================== 课程数据 ==================
-// 你把备份的数据放回这里即可。
-// 新增支持字段：
-// weekMode: "all"  每周
-// weekMode: "odd"  单周
-// weekMode: "even" 双周
+// 把你的备份数据放回这里即可。
+// 数据结构支持：
+// raw[1] = 学分
+// raw[5] = 限选人数
 //
-// 如果不写 weekMode，也会自动从 s、weekType、raw 等字段中识别“单周 / 双周”。
+// 示例：
+// const DATA_STORE = {
+//   "课程组名称": {
+//      notice: "提示",
+//      startTime: "2026-06-01 12:00",
+//      endTime: "2026-06-03 12:00",
+//      requiredCredits: 2,
+//      courses: [
+//          {"n":"课程名","t":"老师","s":"周二7-8节(每周)","d":1,"b":7,"e":8,"raw":["课程名","2","1-16","老师","时间","40"]}
+//      ]
+//   }
+// };
+
 const DATA_STORE = {
     "26-27技能选修课": {
         "notice": "<b>提醒：</b>该工具仅对选课进行梳理，方便校对自己课表，请根据自己实际需求，老师要求进行选择课程，选择课程后记得去学校教学系统确认要求，二次确认。",
@@ -1076,6 +1249,7 @@ const DATA_STORE = {
     */
 };
 
+
 const DAYS = ['周一', '周二', '周三', '周四', '周五'];
 
 const SLOT_ROWS = [
@@ -1105,6 +1279,10 @@ function init() {
     const firstKey = Object.keys(DATA_STORE)[0];
     if (firstKey) {
         switchGroup(firstKey);
+    } else {
+        document.getElementById('banner').innerHTML = '请先把课程数据粘贴到 DATA_STORE 中。';
+        document.getElementById('groupCreditPanel').innerHTML = '暂无课程数据';
+        renderList(null);
     }
 
     if (window.innerWidth <= 1024) {
@@ -1154,6 +1332,80 @@ function getSelectedCredits(groupName) {
 
 function getSelectedCount(groupName) {
     return (selectedMap[groupName] || []).length;
+}
+
+// ================== 限选人数处理：新增重点 ==================
+function normalizeCapacity(value) {
+    if (value === undefined || value === null || value === '') return null;
+
+    const text = String(value).replace(/[^\d.]/g, '');
+    if (!text) return null;
+
+    const num = Number(text);
+    if (Number.isNaN(num) || num <= 0) return null;
+
+    return num;
+}
+
+function getCourseCapacity(course) {
+    // 优先读取明确字段
+    const direct =
+        normalizeCapacity(course.capacity) ||
+        normalizeCapacity(course.limit) ||
+        normalizeCapacity(course.quota) ||
+        normalizeCapacity(course.max) ||
+        normalizeCapacity(course.maxStudents);
+
+    if (direct) return direct;
+
+    // 兼容你现在的数据结构：raw[5] 是限选人数
+    if (course.raw && course.raw.length > 5) {
+        return normalizeCapacity(course.raw[5]);
+    }
+
+    return null;
+}
+
+function getCapacityLevel(course) {
+    const cap = getCourseCapacity(course);
+
+    if (!cap) {
+        return {
+            className: 'capacity-unknown',
+            text: '限选未知',
+            tip: '暂无人数'
+        };
+    }
+
+    if (cap <= 25) {
+        return {
+            className: 'capacity-hard',
+            text: `限选 ${cap} 人`,
+            tip: '🔥 难抢'
+        };
+    }
+
+    if (cap <= 40) {
+        return {
+            className: 'capacity-tight',
+            text: `限选 ${cap} 人`,
+            tip: '⚡ 偏紧'
+        };
+    }
+
+    if (cap <= 60) {
+        return {
+            className: 'capacity-mid',
+            text: `限选 ${cap} 人`,
+            tip: '📌 中等'
+        };
+    }
+
+    return {
+        className: 'capacity-easy',
+        text: `限选 ${cap} 人`,
+        tip: '✅ 宽松'
+    };
 }
 
 // ================== 单双周核心处理 ==================
@@ -1240,8 +1492,6 @@ function weekModeOverlap(a, b) {
     return modeA === modeB;
 }
 
-// 以后如果你想支持更精确的 1-8周 / 9-16周，可以继续扩展这里。
-// 目前最重要的是：单周和双周同一时间不冲突。
 function timeOverlap(a, b) {
     if (a.d !== b.d) return false;
 
@@ -1259,6 +1509,7 @@ function prepareCourses() {
         courses.forEach((course, index) => {
             course._id = `${groupName}__${index}`;
             course.credit = readCourseCredit(course);
+            course.capacity = getCourseCapacity(course);
             course._weekMode = detectWeekMode(course);
 
             const matches = String(course.n || '').match(/\(([^)]+)\)$/);
@@ -1292,7 +1543,7 @@ function renderMenu() {
 
         item.innerHTML = `
             <div class="db-item-main">
-                <span class="db-item-title">${key}</span>
+                <span class="db-item-title">${escapeHtml(key)}</span>
                 <span class="db-item-credit">${selectedCredits}/${required}学分</span>
             </div>
             <div class="db-item-tip">${remain > 0 ? `还需 ${remain} 学分` : '已满足'}</div>
@@ -1552,7 +1803,7 @@ function updateCart() {
         html += `
             <div class="cart-group ${done ? 'done' : ''}">
                 <div class="cart-group-title">
-                    <span>${groupName}</span>
+                    <span>${escapeHtml(groupName)}</span>
                     <span>${credits}/${required}</span>
                 </div>
         `;
@@ -1561,16 +1812,18 @@ function updateCart() {
             html += `<div class="cart-course" style="color:#94a3b8;">暂未选择</div>`;
         } else {
             list.forEach(c => {
+                const cap = getCourseCapacity(c);
                 html += `
                     <div class="cart-course">
                         <div class="cart-course-name">
-                            ${c.n}
+                            ${escapeHtml(c.n)}
                             <span class="week-badge ${getWeekBadgeClass(c)}">${getWeekLabel(c)}</span>
                         </div>
-                        👤 ${c.t || '未知'}<br>
-                        ⏰ ${c.s || '见系统'}<br>
+                        👤 ${escapeHtml(c.t || '未知')}<br>
+                        ⏰ ${escapeHtml(c.s || '见系统')}<br>
                         🎓 ${getCourseCredit(c)} 学分<br>
-                        <span class="cart-remove" onclick="removeCourse('${groupName}', '${c._id}')">移除</span>
+                        👥 限选：${cap ? cap + ' 人' : '未知'}<br>
+                        <span class="cart-remove" onclick="removeCourse('${escapeAttr(groupName)}', '${escapeAttr(c._id)}')">移除</span>
                     </div>
                 `;
             });
@@ -1741,6 +1994,7 @@ function switchGroup(groupName) {
 
     currentPool.forEach(c => {
         c.credit = readCourseCredit(c);
+        c.capacity = getCourseCapacity(c);
         c._weekMode = detectWeekMode(c);
 
         const matches = String(c.n || '').match(/\(([^)]+)\)$/);
@@ -1791,6 +2045,12 @@ function getMaxAvailableCreditInCurrentGroup() {
 
 function renderGroupCreditPanel() {
     const panel = document.getElementById('groupCreditPanel');
+
+    if (!currentGroupName) {
+        panel.innerHTML = '暂无课程组';
+        return;
+    }
+
     const required = getRequiredCredits(currentGroupName);
     const selectedCredits = getSelectedCredits(currentGroupName);
     const selectedCount = getSelectedCount(currentGroupName);
@@ -1807,7 +2067,7 @@ function renderGroupCreditPanel() {
         <div>
             <div class="group-credit-title">🎯 当前组学分要求：${required} 学分</div>
             <div style="font-size:11px;color:#94a3b8;margin-top:4px;">
-                已支持单周 / 双周避让，同一时间单周和双周不会互相冲突。
+                已支持单周 / 双周避让；右侧卡片已显示限选人数与抢课难度。
             </div>
         </div>
         <div class="group-credit-info ${remain === 0 ? 'done' : ''}">
@@ -1819,6 +2079,8 @@ function renderGroupCreditPanel() {
 
 // ================== 搜索和刷新 ==================
 function handleSearch() {
+    if (!currentPool) return;
+
     currentKeyword = document.getElementById('locateSearch').value.trim().toLowerCase();
     const inputEl = document.getElementById('locateSearch');
 
@@ -1994,6 +2256,13 @@ function renderList(list, isManual = false) {
         return;
     }
 
+    // 限选少的放前面，更方便看难抢课
+    list = [...list].sort((a, b) => {
+        const ca = getCourseCapacity(a) || 9999;
+        const cb = getCourseCapacity(b) || 9999;
+        return ca - cb;
+    });
+
     list.forEach(c => {
         const card = document.createElement('div');
 
@@ -2001,6 +2270,8 @@ function renderList(list, isManual = false) {
         const otherConflict = hasConflictWithOtherGroups(c);
         const currentConflict = hasConflictInCurrentGroup(c);
         const addInfo = canAddCourse(c);
+        const capacityInfo = getCapacityLevel(c);
+        const cap = getCourseCapacity(c);
 
         card.className = 'course-card';
 
@@ -2013,44 +2284,86 @@ function renderList(list, isManual = false) {
         let buttonHtml = '';
 
         if (selected) {
-            buttonHtml = `<button class="select-btn remove" onclick="removeCourse('${currentGroupName}', '${c._id}')">移除已选</button>`;
+            buttonHtml = `<button class="select-btn remove" onclick="removeCourse('${escapeAttr(currentGroupName)}', '${escapeAttr(c._id)}')">移除已选</button>`;
         } else if (otherConflict) {
             buttonHtml = `<button class="select-btn conflict disabled" onclick="alert('与其他课程组已选课程时间或周次冲突')">时间/周次冲突</button>`;
         } else if (currentConflict) {
             buttonHtml = `<button class="select-btn disabled" onclick="alert('与本组已选课程时间或周次冲突')">本组冲突</button>`;
         } else if (!addInfo.ok) {
-            buttonHtml = `<button class="select-btn disabled" onclick="alert('${addInfo.reason}')">${addInfo.reason}</button>`;
+            buttonHtml = `<button class="select-btn disabled" onclick="alert('${escapeAttr(addInfo.reason)}')">${escapeHtml(addInfo.reason)}</button>`;
         } else {
-            buttonHtml = `<button class="select-btn" onclick="addCourse('${c._id}')">加入选择 +${getCourseCredit(c)}学分</button>`;
+            buttonHtml = `<button class="select-btn" onclick="addCourse('${escapeAttr(c._id)}')">加入选择 +${getCourseCredit(c)}学分</button>`;
         }
 
         card.innerHTML = `
             <div class="card-head">
-                ${c.n}
-                <span class="week-badge ${getWeekBadgeClass(c)}">${getWeekLabel(c)}</span>
+                <div class="course-title-row">
+                    <div class="course-title">
+                        ${escapeHtml(c.n)}
+                    </div>
+                    <div class="capacity-pill ${capacityInfo.className}">
+                        👥 ${capacityInfo.text}
+                    </div>
+                </div>
+
+                <div class="card-badges">
+                    <span class="week-badge ${getWeekBadgeClass(c)}">${getWeekLabel(c)}</span>
+                    <span class="small-badge">🎓 ${getCourseCredit(c)} 学分</span>
+                    <span class="small-badge">${escapeHtml(c.subCategory || '其他')}</span>
+                </div>
             </div>
+
             <div class="card-body">
-                <div>👤 教师：${c.t || '未知'}</div>
-                <div>⏰ 时间：${c.s || '见系统'}</div>
-                <div>📅 周次：${getWeekLabel(c)}</div>
-                <div>🎓 学分：${getCourseCredit(c)}</div>
-                <div class="small-badge">${c.subCategory || '其他'}</div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">教师</div>
+                        <div class="info-value">${escapeHtml(c.t || '未知')}</div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-label">限选人数</div>
+                        <div class="info-value">${cap ? cap + ' 人' : '未知'}</div>
+                    </div>
+
+                    <div class="info-item full">
+                        <div class="info-label">上课时间</div>
+                        <div class="info-value">${escapeHtml(c.s || '见系统')}</div>
+                    </div>
+                </div>
+
+
                 ${
                     otherConflict
-                    ? `<div style="margin-top:6px;color:var(--purple);font-weight:700;">⚠️ 与其他组已选课程时间/周次冲突</div>`
+                    ? `<div style="margin-top:8px;color:var(--purple);font-weight:800;">⚠️ 与其他组已选课程时间/周次冲突</div>`
                     : ''
                 }
+
                 ${
                     currentConflict
-                    ? `<div style="margin-top:6px;color:var(--danger);font-weight:700;">⚠️ 与本组已选课程时间/周次冲突</div>`
+                    ? `<div style="margin-top:8px;color:var(--danger);font-weight:800;">⚠️ 与本组已选课程时间/周次冲突</div>`
                     : ''
                 }
+
                 <div class="card-actions">${buttonHtml}</div>
             </div>
         `;
 
         container.appendChild(card);
     });
+}
+
+// ================== 安全转义 ==================
+function escapeHtml(value) {
+    return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+function escapeAttr(value) {
+    return escapeHtml(value).replace(/`/g, '&#096;');
 }
 
 init();
