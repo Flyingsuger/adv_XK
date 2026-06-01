@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>选课辅助系统 - 精准排除版</title>
+    <title>选课辅助系统 - 25广告1班</title>
     <style>
+        /* ================== 样式定义 ================== */
         :root { 
             --sidebar-bg: #1e293b; 
             --main-bg: #f1f5f9; 
@@ -19,37 +20,243 @@
             --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             --danger-light: #ffe4e6;
             --danger: #e11d48;
+            --success: #16a34a;
+            --success-light: #dcfce7;
+            --warning: #f59e0b;
+            --warning-light: #fef3c7;
         }
         
-        body, html { height: 100vh; margin: 0; padding: 0; font-family: "SF Pro Display", "PingFang SC", sans-serif; }
-        body { display: flex; background: var(--main-bg); color: #1e293b; overflow: hidden; }
+        body, html { 
+            height: 100vh; 
+            margin: 0; 
+            padding: 0; 
+            font-family: "SF Pro Display", "PingFang SC", sans-serif; 
+        }
+
+        body { 
+            display: flex; 
+            background: var(--main-bg); 
+            color: #1e293b; 
+            overflow: hidden; 
+        }
         
         /* 侧边栏 */
-        .sidebar { width: 260px; background: var(--sidebar-bg); color: white; display: flex; flex-direction: column; flex-shrink: 0; z-index: 10; transition: all 0.3s; }
-        .sidebar-header { padding: 25px 20px; border-bottom: 1px solid #334155; font-weight: 700; font-size: 1.2em; }
-        .db-list { flex: 1; overflow-y: auto; padding: 15px; }
-        .db-list::-webkit-scrollbar { width: 4px; height: 4px; }
-        .db-list::-webkit-scrollbar-thumb { background: #475569; border-radius: 2px; }
+        .sidebar { 
+            width: 260px; 
+            background: var(--sidebar-bg); 
+            color: white; 
+            display: flex; 
+            flex-direction: column; 
+            flex-shrink: 0; 
+            z-index: 10; 
+            transition: all 0.3s; 
+        }
+
+        .sidebar-header { 
+            padding: 25px 20px; 
+            border-bottom: 1px solid #334155; 
+            font-weight: 700; 
+            font-size: 1.2em; 
+        }
+
+        .db-list { 
+            flex: 1; 
+            overflow-y: auto; 
+            padding: 15px; 
+        }
+
+        .db-list::-webkit-scrollbar { 
+            width: 4px; 
+            height: 4px; 
+        }
+
+        .db-list::-webkit-scrollbar-thumb { 
+            background: #475569; 
+            border-radius: 2px; 
+        }
         
-        .db-item { padding: 12px 18px; margin-bottom: 8px; border-radius: 12px; cursor: pointer; background: #334155; font-size: 14px; transition: 0.3s; white-space: nowrap; }
-        .db-item.active { background: var(--primary); box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); }
-        .sidebar-footer { padding: 15px; border-top: 1px solid #334155; background: rgba(0,0,0,0.2); font-size: 11px; color: #94a3b8; line-height: 1.6; }
+        .db-item { 
+            padding: 12px 18px; 
+            margin-bottom: 8px; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            background: #334155; 
+            font-size: 14px; 
+            transition: 0.3s; 
+            white-space: nowrap; 
+        }
+
+        .db-item.active { 
+            background: var(--primary); 
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); 
+        }
+
+        .sidebar-footer { 
+            padding: 15px; 
+            border-top: 1px solid #334155; 
+            background: rgba(0,0,0,0.2); 
+            font-size: 11px; 
+            color: #94a3b8; 
+            line-height: 1.6; 
+        }
 
         /* 主区域 */
-        .content { flex: 1; display: flex; flex-direction: column; padding: 15px 20px; min-width: 0; height: 100vh; box-sizing: border-box; overflow-y: auto; }
-        .banner { background: var(--banner-bg); color: var(--banner-text); padding: 12px 18px; border-radius: 12px; margin-bottom: 15px; font-size: 13px; line-height: 1.5; border: 1px solid #fef08a; flex-shrink: 0; }
+        .content { 
+            flex: 1; 
+            display: flex; 
+            flex-direction: column; 
+            padding: 15px 20px; 
+            min-width: 0; 
+            height: 100vh; 
+            box-sizing: border-box; 
+            overflow-y: auto; 
+        }
+
+        .banner { 
+            background: var(--banner-bg); 
+            color: var(--banner-text); 
+            padding: 12px 18px; 
+            border-radius: 12px; 
+            margin-bottom: 15px; 
+            font-size: 13px; 
+            line-height: 1.5; 
+            border: 1px solid #fef08a; 
+            flex-shrink: 0; 
+        }
+
+        /* ================== 新增：选课倒计时区域 ================== */
+        .countdown-panel {
+            background: white;
+            border-radius: 16px;
+            padding: 14px 18px;
+            margin-bottom: 15px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+
+        .countdown-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .countdown-title {
+            font-size: 14px;
+            font-weight: 800;
+            color: #1e293b;
+        }
+
+        .countdown-time {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--primary);
+            text-align: right;
+            line-height: 1.4;
+        }
+
+        .countdown-meta {
+            font-size: 11px;
+            color: #64748b;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 12px;
+            background: #e2e8f0;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            border-radius: 999px;
+            transition: width 0.5s linear, background 0.3s;
+            background: linear-gradient(90deg, #22c55e, #3b82f6);
+        }
+
+        .countdown-panel.waiting {
+            background: var(--warning-light);
+            border-color: #fde68a;
+        }
+
+        .countdown-panel.waiting .countdown-time {
+            color: #b45309;
+        }
+
+        .countdown-panel.running {
+            background: #eff6ff;
+            border-color: #bfdbfe;
+        }
+
+        .countdown-panel.running .countdown-time {
+            color: #1d4ed8;
+        }
+
+        .countdown-panel.ended {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+            opacity: 0.9;
+        }
+
+        .countdown-panel.ended .countdown-time {
+            color: #64748b;
+        }
         
-        .header-tools { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; flex-shrink: 0; }
-        .locate-input { width: 100%; padding: 12px 18px; border: 2px solid white; border-radius: 12px; font-size: 14px; outline: none; transition: 0.3s; box-shadow: var(--card-shadow); box-sizing: border-box; }
-        .locate-input.searching { border-color: var(--highlight); box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.1); }
+        .header-tools { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 10px; 
+            margin-bottom: 15px; 
+            flex-shrink: 0; 
+        }
 
-        .filter-container { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
-        .tag-chip { padding: 6px 15px; background: white; border-radius: 20px; cursor: pointer; font-size: 12px; color: #64748b; transition: 0.3s; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
-        .tag-chip.active { background: var(--primary); color: white; }
+        .locate-input { 
+            width: 100%; 
+            padding: 12px 18px; 
+            border: 2px solid white; 
+            border-radius: 12px; 
+            font-size: 14px; 
+            outline: none; 
+            transition: 0.3s; 
+            box-shadow: var(--card-shadow); 
+            box-sizing: border-box; 
+        }
 
-        /* ========================
-           新增：矩阵排除控制面板
-           ======================== */
+        .locate-input.searching { 
+            border-color: var(--highlight); 
+            box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.1); 
+        }
+
+        .filter-container { 
+            display: flex; 
+            flex-wrap: wrap; 
+            gap: 8px; 
+            align-items: center; 
+        }
+
+        .tag-chip { 
+            padding: 6px 15px; 
+            background: white; 
+            border-radius: 20px; 
+            cursor: pointer; 
+            font-size: 12px; 
+            color: #64748b; 
+            transition: 0.3s; 
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05); 
+        }
+
+        .tag-chip.active { 
+            background: var(--primary); 
+            color: white; 
+        }
+
+        /* 矩阵排除控制面板 */
         .exclusion-panel {
             background: rgba(255, 255, 255, 0.6);
             padding: 12px;
@@ -59,68 +266,89 @@
             flex-direction: column;
             gap: 8px;
         }
-        .exclusion-label { font-size: 11px; font-weight: 700; color: #64748b; margin-bottom: 4px; display: flex; align-items: center; justify-content: space-between; }
-        
-        /* 矩阵网格布局 */
-        .matrix-container {
-            display: grid;
-            grid-template-columns: 40px repeat(5, 1fr); /* 左侧标签 + 5天 */
-            gap: 6px;
-            width: 100%;
-        }
 
-        /* 矩阵单元格通用样式 */
-        .mx-cell {
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 6px;
-            font-size: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-            background: white;
-            border: 1px solid #e2e8f0;
-            color: #64748b;
-            user-select: none;
+        .exclusion-label { 
+            font-size: 11px; 
+            font-weight: 700; 
+            color: #64748b; 
+            margin-bottom: 4px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
         }
         
-        /* 表头样式 (周一..周五) */
-        .mx-head-col {
-            font-weight: 700;
-            background: transparent;
-            border: none;
-            font-size: 12px;
+        .matrix-container { 
+            display: grid; 
+            grid-template-columns: 40px repeat(5, 1fr); 
+            gap: 6px; 
+            width: 100%; 
         }
-        .mx-head-col:hover { color: var(--danger); background: #fff0f2; }
 
-        /* 行头样式 (上午/下午) */
-        .mx-head-row {
-            font-weight: 700;
-            background: transparent;
-            border: none;
-            font-size: 11px;
-            justify-content: flex-start;
-        }
-        .mx-head-row:hover { color: var(--danger); }
-
-        /* 激活状态 (被排除) */
-        .mx-cell.excluded {
-            background: var(--danger-light);
-            color: var(--danger);
-            border-color: #fda4af;
-            text-decoration: line-through;
-            font-weight: bold;
+        .mx-cell { 
+            height: 32px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            border-radius: 6px; 
+            font-size: 12px; 
+            cursor: pointer; 
+            transition: all 0.2s; 
+            background: white; 
+            border: 1px solid #e2e8f0; 
+            color: #64748b; 
+            user-select: none; 
         }
         
-        /* 鼠标悬停 */
-        .mx-cell:not(.mx-head-col):not(.mx-head-row):hover {
-            border-color: var(--primary);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        .mx-head-col { 
+            font-weight: 700; 
+            background: transparent; 
+            border: none; 
+            font-size: 12px; 
         }
 
-        /* 课表网格 */
-        .grid-wrapper { flex: 1; min-height: 0; background: white; border-radius: 15px; padding: 12px; box-shadow: var(--card-shadow); display: flex; flex-direction: column; overflow: hidden; }
+        .mx-head-col:hover { 
+            color: var(--danger); 
+            background: #fff0f2; 
+        }
+
+        .mx-head-row { 
+            font-weight: 700; 
+            background: transparent; 
+            border: none; 
+            font-size: 11px; 
+            justify-content: flex-start; 
+        }
+
+        .mx-head-row:hover { 
+            color: var(--danger); 
+        }
+
+        .mx-cell.excluded { 
+            background: var(--danger-light); 
+            color: var(--danger); 
+            border-color: #fda4af; 
+            text-decoration: line-through; 
+            font-weight: bold; 
+        }
+
+        .mx-cell:not(.mx-head-col):not(.mx-head-row):hover { 
+            border-color: var(--primary); 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05); 
+        }
+
+        /* 网格与格子 */
+        .grid-wrapper { 
+            flex: 1; 
+            min-height: 0; 
+            background: white; 
+            border-radius: 15px; 
+            padding: 12px; 
+            box-shadow: var(--card-shadow); 
+            display: flex; 
+            flex-direction: column; 
+            overflow: hidden; 
+        }
+
         .grid { 
             display: grid; 
             flex: 1; 
@@ -132,53 +360,177 @@
             overflow: auto; 
         }
         
-        .cell { background: #f8fafc; border-radius: 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; font-size: 11px; transition: all 0.2s; border: 1px solid #f1f5f9; text-align: center; overflow: hidden; word-break: break-all; position: relative; }
-        .cell.head { background: none; font-weight: 700; color: #94a3b8; cursor: default; border: none; }
-        
-        .cell.active-slot { border: 2px solid var(--primary) !important; z-index: 5; transform: scale(1.02); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        .cell.search-match { border: 2px solid var(--highlight) !important; font-weight: 800; color: #c2410c !important; }
+        .cell { 
+            background: #f8fafc; 
+            border-radius: 6px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            cursor: pointer; 
+            font-size: 11px; 
+            transition: all 0.2s; 
+            border: 1px solid #f1f5f9; 
+            text-align: center; 
+            overflow: hidden; 
+            word-break: break-all; 
+            position: relative; 
+        }
 
-        /* 被排除的格子视觉效果 */
+        .cell.head { 
+            background: none; 
+            font-weight: 700; 
+            color: #94a3b8; 
+            cursor: default; 
+            border: none; 
+        }
+        
+        .cell.active-slot { 
+            border: 2px solid var(--primary) !important; 
+            z-index: 5; 
+            transform: scale(1.02); 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
+        }
+
+        .cell.search-match { 
+            border: 2px solid var(--highlight) !important; 
+            font-weight: 800; 
+            color: #c2410c !important; 
+        }
+
         .cell.excluded-slot {
             background-color: var(--excluded-bg) !important;
-            /* 斜纹背景 */
-            background-image: repeating-linear-gradient(
-                45deg,
-                var(--excluded-bg),
-                var(--excluded-bg) 10px,
-                var(--excluded-stripe) 10px,
-                var(--excluded-stripe) 12px
-            ) !important;
-            pointer-events: none; /* 禁止点击 */
-            opacity: 0.6;
-            color: transparent !important; /* 隐藏内部文字 */
+            background-image: repeating-linear-gradient(45deg, var(--excluded-bg), var(--excluded-bg) 10px, var(--excluded-stripe) 10px, var(--excluded-stripe) 12px) !important;
+            pointer-events: none; 
+            opacity: 0.6; 
+            color: transparent !important; 
             border-color: transparent !important;
         }
 
         /* 右侧面板 */
-        .side-panel { width: 320px; background: white; border-left: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; z-index: 20; }
-        .panel-header { padding: 20px; border-bottom: 1px solid var(--border); }
-        .course-list { flex: 1; overflow-y: auto; padding: 15px; }
-        .course-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 12px; overflow: hidden; }
-        .card-head { padding: 12px; font-weight: 600; font-size: 13px; background: #fcfcfc; }
-        .card-body { padding: 12px; font-size: 12px; color: #64748b; border-top: 1px dashed var(--border); }
+        .side-panel { 
+            width: 320px; 
+            background: white; 
+            border-left: 1px solid var(--border); 
+            display: flex; 
+            flex-direction: column; 
+            flex-shrink: 0; 
+            z-index: 20; 
+        }
 
+        .panel-header { 
+            padding: 20px; 
+            border-bottom: 1px solid var(--border); 
+        }
+
+        .course-list { 
+            flex: 1; 
+            overflow-y: auto; 
+            padding: 15px; 
+        }
+
+        .course-card { 
+            background: #fff; 
+            border: 1px solid var(--border); 
+            border-radius: 12px; 
+            margin-bottom: 12px; 
+            overflow: hidden; 
+        }
+
+        .card-head { 
+            padding: 12px; 
+            font-weight: 600; 
+            font-size: 13px; 
+            background: #fcfcfc; 
+        }
+
+        .card-body { 
+            padding: 12px; 
+            font-size: 12px; 
+            color: #64748b; 
+            border-top: 1px dashed var(--border); 
+        }
+
+        /* 响应式 */
         @media screen and (max-width: 1024px) {
-            body { flex-direction: column; overflow-y: auto; height: auto; }
-            .sidebar { width: 100%; height: auto; flex-direction: column; }
-            .sidebar-header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
-            .db-list { display: flex; flex-direction: row; overflow-x: auto; padding: 10px 15px; gap: 10px; border-bottom: 1px solid #334155; }
-            .db-item { margin-bottom: 0; flex-shrink: 0; padding: 8px 16px; }
-            .sidebar-footer { display: none; }
-            .content { height: auto; overflow: visible; padding: 10px; }
-            .locate-input { font-size: 16px; }
-            .grid-wrapper { height: 65vh; min-height: 400px; }
-            .side-panel { width: 100%; height: auto; border-left: none; border-top: 5px solid var(--main-bg); max-height: none; }
-            .course-list { max-height: 500px; }
-            
-            /* 移动端矩阵微调 */
-            .mx-cell { font-size: 11px; height: 36px; } /* 稍微加高方便触摸 */
-            .mx-head-col { font-size: 11px; }
+            body { 
+                flex-direction: column; 
+                overflow-y: auto; 
+                height: auto; 
+            }
+
+            .sidebar { 
+                width: 100%; 
+                height: auto; 
+                flex-direction: column; 
+            }
+
+            .sidebar-header { 
+                padding: 15px 20px; 
+                display: flex; 
+                justify-content: space-between; 
+                align-items: center; 
+            }
+
+            .db-list { 
+                display: flex; 
+                flex-direction: row; 
+                overflow-x: auto; 
+                padding: 10px 15px; 
+                gap: 10px; 
+                border-bottom: 1px solid #334155; 
+            }
+
+            .db-item { 
+                margin-bottom: 0; 
+                flex-shrink: 0; 
+                padding: 8px 16px; 
+            }
+
+            .sidebar-footer { 
+                display: none; 
+            }
+
+            .content { 
+                height: auto; 
+                overflow: visible; 
+                padding: 10px; 
+            }
+
+            .locate-input { 
+                font-size: 16px; 
+            }
+
+            .grid-wrapper { 
+                height: 65vh; 
+                min-height: 400px; 
+            }
+
+            .side-panel { 
+                width: 100%; 
+                height: auto; 
+                border-left: none; 
+                border-top: 5px solid var(--main-bg); 
+                max-height: none; 
+            }
+
+            .course-list { 
+                max-height: 500px; 
+            }
+
+            .mx-cell { 
+                font-size: 11px; 
+                height: 36px; 
+            }
+
+            .countdown-top {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .countdown-time {
+                text-align: left;
+            }
         }
     </style>
 </head>
@@ -191,31 +543,40 @@
     </div>
     <div id="menu" class="db-list"></div>
     <div class="sidebar-footer">
-        <b>💡 免责声明</b><br>
-        本工具仅供排课参考，选中课程后请及时确认。<br><br>
-        <b>🚫 排除用法</b><br>
-        点击矩阵中的格子，变红即为屏蔽该时段，屏蔽后不计入搜索和热力图。
+        <b>🚫 排除矩阵</b><br>
+        点击矩阵格子可屏蔽对应时段。<br><br>
     </div>
 </div>
 
 <div class="content">
     <div id="banner" class="banner"></div>
+
+    <!-- 新增：倒计时显示区域 -->
+    <div id="countdownPanel" class="countdown-panel">
+        <div class="countdown-top">
+            <div id="countdownTitle" class="countdown-title">⏳ 选课时间</div>
+            <div id="countdownTime" class="countdown-time">正在计算...</div>
+        </div>
+        <div id="countdownMeta" class="countdown-meta"></div>
+        <div class="progress-track">
+            <div id="progressBar" class="progress-bar"></div>
+        </div>
+    </div>
     
     <div class="header-tools">
         <input type="text" id="locateSearch" class="locate-input" placeholder="🔍 输入课程、教师名实时筛选..." oninput="handleSearch()">
         
         <div class="exclusion-panel">
             <div class="exclusion-label">
-                <span>🚫 时段排除 (点击格子屏蔽/恢复)</span>
-                <span style="font-size:9px; font-weight:normal; cursor:pointer; color:#3b82f6" onclick="resetExclusion()">↺ 重置所有</span>
+                <span>🚫 时段排除，红色为屏蔽</span>
+                <span style="font-size:9px; font-weight:normal; cursor:pointer; color:#3b82f6" onclick="resetExclusion()">↺ 重置</span>
             </div>
-            
-            <div class="matrix-container" id="matrixContainer">
-                </div>
+            <div class="matrix-container" id="matrixContainer"></div>
         </div>
 
         <div id="filterChips" class="filter-container"></div>
     </div>
+
     <div class="grid-wrapper">
         <div id="grid" class="grid"></div>
     </div>
@@ -230,116 +591,238 @@
 </div>
 
 <script>
-// 课程数据
+// ================== 课程数据 ==================
+// 每个课程组新增 startTime 和 endTime
+// 格式建议使用：YYYY-MM-DD HH:mm
 const DATA_STORE = {
-    "通识选修课_2轮": {
-        "notice": "🎨 <b>创意提醒：</b>《平面设计》需要自带电脑上课，教室配置了专业手绘板。",
+    "26-27技能选修课": {
+        "notice": "<b>提醒：</b>该工具仅对选课进行梳理，方便校对自己课表，请根据自己实际需求，老师要求进行选择课程，选择课程后记得去学校教学系统确认要求，二次确认。",
+        "startTime": "2026-06-01 12:00",
+        "endTime": "2026-06-03 12:00",
         "courses": [
- {"n":"城市赏析 (人文艺术类-人文类)","t":"谭跃","s":"周二7-8节(每周)(待定)(1-15周)","d":1,"b":7,"e":8,"raw":["城市赏析 (人文艺术类-人文类)","2","1-15","谭跃","周二7-8节(每周)(待定)(1-15周)","35"]},
-  {"n":"地域性建筑赏析(1班) (人文艺术类-人文类)","t":"王鑫刚","s":"周二7-8节(每周)(待定)(1-15周)","d":1,"b":7,"e":8,"raw":["地域性建筑赏析(1班) (人文艺术类-人文类)","2","1-15","王鑫刚","周二7-8节(每周)(待定)(1-15周)","33"]},
-  {"n":"地域性建筑赏析(2班) (人文艺术类-人文类)","t":"王鑫刚","s":"周二9-10节(每周)(待定)(1-15周)","d":1,"b":9,"e":10,"raw":["地域性建筑赏析(2班) (人文艺术类-人文类)","2","1-15","王鑫刚","周二9-10节(每周)(待定)(1-15周)","58"]},
-  {"n":"福建土楼与客家文化 (人文艺术类-人文类)","t":"林建辉","s":"周四7-8节(每周)(待定)(1-15周)","d":3,"b":7,"e":8,"raw":["福建土楼与客家文化 (人文艺术类-人文类)","2","1-15","林建辉","周四7-8节(每周)(待定)(1-15周)","8"]},
-  {"n":"鲁迅研究 (人文艺术类-人文类)","t":"林祁","s":"周二9-10节(每周)(待定)(1-15周)","d":1,"b":9,"e":10,"raw":["鲁迅研究 (人文艺术类-人文类)","2","1-15","林祁","周二9-10节(每周)(待定)(1-15周)","65"]},
-  {"n":"美国历史与文化(1班) (人文艺术类-人文类)","t":"宋晓东","s":"周四7-8节(每周)(待定)(1-15周)","d":3,"b":7,"e":8,"raw":["美国历史与文化(1班) (人文艺术类-人文类)","2","1-15","宋晓东","周四7-8节(每周)(待定)(1-15周)","33"]},
-  {"n":"美国历史与文化(2班) (人文艺术类-人文类)","t":"宋晓东","s":"周四9-10节(每周)(待定)(1-15周)","d":3,"b":9,"e":10,"raw":["美国历史与文化(2班) (人文艺术类-人文类)","2","1-15","宋晓东","周四9-10节(每周)(待定)(1-15周)","59"]},
-  {"n":"莎士比亚与西方社会 (人文艺术类-人文类)","t":"夏光武","s":"周四9-10节(每周)(待定)(1-15周)","d":3,"b":9,"e":10,"raw":["莎士比亚与西方社会 (人文艺术类-人文类)","2","1-15","夏光武","周四9-10节(每周)(待定)(1-15周)","73"]},
-  {"n":"西方文化史(1班) (人文艺术类-人文类)","t":"孙博","s":"周一9-10节(每周)(待定)(1-15周)","d":0,"b":9,"e":10,"raw":["西方文化史(1班) (人文艺术类-人文类)","2","1-15","孙博","周一9-10节(每周)(待定)(1-15周)","29"]},
-  {"n":"西方文化史(2班) (人文艺术类-人文类)","t":"孙博","s":"周二9-10节(每周)(待定)(1-15周)","d":1,"b":9,"e":10,"raw":["西方文化史(2班) (人文艺术类-人文类)","2","1-15","孙博","周二9-10节(每周)(待定)(1-15周)","54"]},
-  {"n":"中国古代五行哲学思想研究(1班) (人文艺术类-人文类)","t":"梁忠","s":"周三1-2节(每周)(待定)(1-15周)","d":2,"b":1,"e":2,"raw":["中国古代五行哲学思想研究(1班) (人文艺术类-人文类)","2","1-15","梁忠","周三1-2节(每周)(待定)(1-15周)","15"]},
-  {"n":"中国古代五行哲学思想研究(2班) (人文艺术类-人文类)","t":"梁忠","s":"周三7-8节(每周)(待定)(1-15周)","d":2,"b":7,"e":8,"raw":["中国古代五行哲学思想研究(2班) (人文艺术类-人文类)","2","1-15","梁忠","周三7-8节(每周)(待定)(1-15周)","29"]},
-  {"n":"中国哲学十六讲(1班) (人文艺术类-人文类)","t":"梁忠","s":"周四7-8节(每周)(待定)(1-15周)","d":3,"b":7,"e":8,"raw":["中国哲学十六讲(1班) (人文艺术类-人文类)","2","1-15","梁忠","周四7-8节(每周)(待定)(1-15周)","33"]},
-  {"n":"中国哲学十六讲(2班) (人文艺术类-人文类)","t":"梁忠","s":"周四9-10节(每周)(待定)(1-15周)","d":3,"b":9,"e":10,"raw":["中国哲学十六讲(2班) (人文艺术类-人文类)","2","1-15","梁忠","周四9-10节(每周)(待定)(1-15周)","70"]},
-  {"n":"中西文化比较(1班) (人文艺术类-人文类)","t":"付汉生","s":"周二3-4节(每周)(待定)(1-15周)","d":1,"b":3,"e":4,"raw":["中西文化比较(1班) (人文艺术类-人文类)","2","1-15","付汉生","周二3-4节(每周)(待定)(1-15周)","18"]},
-  {"n":"中西文化比较(2班) (人文艺术类-人文类)","t":"付汉生","s":"周四7-8节(每周)(待定)(1-15周)","d":3,"b":7,"e":8,"raw":["中西文化比较(2班) (人文艺术类-人文类)","2","1-15","付汉生","周四7-8节(每周)(待定)(1-15周)","54"]},
-  {"n":"中西文化比较(3班) (人文艺术类-人文类)","t":"孙博","s":"周三9-10节(每周)(待定)(1-15周)","d":2,"b":9,"e":10,"raw":["中西文化比较(3班) (人文艺术类-人文类)","2","1-15","孙博","周三9-10节(每周)(待定)(1-15周)","33"]},
-  {"n":"中西文化比较(4班) (人文艺术类-人文类)","t":"孙博","s":"周四9-10节(每周)(待定)(1-15周)","d":3,"b":9,"e":10,"raw":["中西文化比较(4班) (人文艺术类-人文类)","2","1-15","孙博","周四9-10节(每周)(待定)(1-15周)","65"]},
-  {"n":"城市空间与建筑艺术(1班) (人文艺术类-艺术类)","t":"尹巧玉","s":"周二9-10节(每周)(待定)(1-15周)","d":1,"b":9,"e":10,"raw":["城市空间与建筑艺术(1班) (人文艺术类-艺术类)","2","1-15","尹巧玉","周二9-10节(每周)(待定)(1-15周)","38"]},
-  {"n":"城市空间与建筑艺术(2班) (人文艺术类-艺术类)","t":"陈宇祯","s":"周四9-10节(每周)(待定)(1-15周)","d":3,"b":9,"e":10,"raw":["城市空间与建筑艺术(2班) (人文艺术类-艺术类)","2","1-15","陈宇祯","周四9-10节(每周)(待定)(1-15周)","52"]},
-  {"n":"城市空间与建筑艺术(3班) (人文艺术类-艺术类)","t":"黄雨萌","s":"周二9-10节(每周)(待定)(1-15周)","d":1,"b":9,"e":10,"raw":["城市空间与建筑艺术(3班) (人文艺术类-艺术类)","2","1-15","黄雨萌","周二9-10节(每周)(待定)(1-15周)","48"]},
-  {"n":"二胡演奏入门 (人文艺术类-艺术类)","t":"张婷婷","s":"周四9-10节(每周)(学活#二楼圆形多功能厅)(1-15周)","d":3,"b":9,"e":10,"raw":["二胡演奏入门 (人文艺术类-艺术类)","2","1-15","张婷婷","周四9-10节(每周)(学活#二楼圆形多功能厅)(1-15周)","17"]},
-  {"n":"歌剧与交响乐(2班) (人文艺术类-艺术类)","t":"陈展宙","s":"周二7-8节(每周)(待定)(1-15周)","d":1,"b":7,"e":8,"raw":["歌剧与交响乐(2班) (人文艺术类-艺术类)","2","1-15","陈展宙","周二7-8节(每周)(待定)(1-15周)","60"]},
-  {"n":"歌剧与交响乐(3班) (人文艺术类-艺术类)","t":"李丽莉","s":"周四7-8节(每周)(待定)(1-15周)","d":3,"b":7,"e":8,"raw":["歌剧与交响乐(3班) (人文艺术类-艺术类)","2","1-15","李丽莉","周四7-8节(每周)(待定)(1-15周)","71"]},
-  {"n":"家装设计与赏析(3班) (人文艺术类-艺术类)","t":"王廷廷","s":"周五1-2节(每周)(待定)(1-15周)","d":4,"b":1,"e":2,"raw":["家装设计与赏析(3班) (人文艺术类-艺术类)","2","1-15","王廷廷","周五1-2节(每周)(待定)(1-15周)","7"]},
-  {"n":"空间设计与生活美学 (人文艺术类-艺术类)","t":"吴一凡","s":"周二7-8节(每周)(待定)(1-15周)","d":1,"b":7,"e":8,"raw":["空间设计与生活美学 (人文艺术类-艺术类)","2","1-15","吴一凡","周二7-8节(每周)(待定)(1-15周)","58"]},
-  {"n":"设计思维体验与鉴赏 (人文艺术类-艺术类)","t":"吴国荣","s":"周二7-8节(每周)(待定)(1-15周)","d":1,"b":7,"e":8,"raw":["设计思维体验与鉴赏 (人文艺术类-艺术类)","2","1-15","吴国荣","周二7-8节(每周)(待定)(1-15周)","66"]},
-  {"n":"书法(1班) (人文艺术类-艺术类)","t":"王占北","s":"周二7-8节(每周)(待定)(1-15周)","d":1,"b":7,"e":8,"raw":["书法(1班) (人文艺术类-艺术类)","2","1-15","王占北","周二7-8节(每周)(待定)(1-15周)","38"]},
-  {"n":"书法(2班) (人文艺术类-艺术类)","t":"王占北","s":"周二9-10节(每周)(待定)(1-15周)","d":1,"b":9,"e":10,"raw":["书法(2班) (人文艺术类-艺术类)","2","1-15","王占北","周二9-10节(每周)(待定)(1-15周)","37"]},
-  {"n":"书法(3班) (人文艺术类-艺术类)","t":"陆海翔","s":"周二7-8节(每周)(待定)(1-15周)","d":1,"b":7,"e":8,"raw":["书法(3班) (人文艺术类-艺术类)","2","1-15","陆海翔","周二7-8节(每周)(待定)(1-15周)","17"]},
-  {"n":"书法(4班) (人文艺术类-艺术类)","t":"陆海翔","s":"周二9-10节(每周)(待定)(1-15周)","d":1,"b":9,"e":10,"raw":["书法(4班) (人文艺术类-艺术类)","2","1-15","陆海翔","周二9-10节(每周)(待定)(1-15周)","15"]},
-  {"n":"书法(5班) (人文艺术类-艺术类)","t":"陆海翔","s":"周四7-8节(每周)(待定)(1-15周)","d":3,"b":7,"e":8,"raw":["书法(5班) (人文艺术类-艺术类)","2","1-15","陆海翔","周四7-8节(每周)(待定)(1-15周)","9"]},
-  {"n":"书法(6班) (人文艺术类-艺术类)","t":"陆海翔","s":"周四9-10节(每周)(待定)(1-15周)","d":3,"b":9,"e":10,"raw":["书法(6班) (人文艺术类-艺术类)","2","1-15","陆海翔","周四9-10节(每周)(待定)(1-15周)","33"]},
-  {"n":"水彩绘画(1班) (人文艺术类-艺术类)","t":"魏巨川","s":"周四5-8节(每周)(文C#310)(1-7周)","d":3,"b":5,"e":8,"raw":["水彩绘画(1班) (人文艺术类-艺术类)","2","1-15","魏巨川","周四5-8节(每周)(文C#310)(1-7周)","10"]},
-  {"n":"水彩绘画(2班) (人文艺术类-艺术类)","t":"魏巨川","s":"周四5-8节(每周)(文C#310)(9-15周)","d":3,"b":5,"e":8,"raw":["水彩绘画(2班) (人文艺术类-艺术类)","2","1-15","魏巨川","周四5-8节(每周)(文C#310)(9-15周)","25"]},
-  {"n":"水彩绘画(3班) (人文艺术类-艺术类)","t":"侯思雨","s":"周四5-8节(每周)(文A#101)(1-8周)","d":3,"b":5,"e":8,"raw":["水彩绘画(3班) (人文艺术类-艺术类)","2","1-15","侯思雨","周四5-8节(每周)(文A#101)(1-8周)","2"]},
-  {"n":"水彩绘画(4班) (人文艺术类-艺术类)","t":"曾金妹","s":"周四1-4节(每周)(文C#101)(1-8周)","d":3,"b":1,"e":4,"raw":["水彩绘画(4班) (人文艺术类-艺术类)","2","1-15","曾金妹","周四1-4节(每周)(文C#101)(1-8周)","6"]},
-  {"n":"水墨画入门(2班) (人文艺术类-艺术类)","t":"陈莉(教师)","s":"周四5-8节(每周)(文C#307)(9-15周)","d":3,"b":5,"e":8,"raw":["水墨画入门(2班) (人文艺术类-艺术类)","2","1-15","陈莉(教师)","周四5-8节(每周)(文C#307)(9-15周)","25"]},
-  {"n":"西方音乐赏析(1班) (人文艺术类-艺术类)","t":"陈恺麟","s":"周四7-8节(每周)(待定)(1-15周)","d":3,"b":7,"e":8,"raw":["西方音乐赏析(1班) (人文艺术类-艺术类)","2","1-15","陈恺麟","周四7-8节(每周)(待定)(1-15周)","17"]},
-  {"n":"西方音乐赏析(2班) (人文艺术类-艺术类)","t":"陈恺麟","s":"周四9-10节(每周)(待定)(1-15周)","d":3,"b":9,"e":10,"raw":["西方音乐赏析(2班) (人文艺术类-艺术类)","2","1-15","陈恺麟","周四9-10节(每周)(待定)(1-15周)","33"]},
-  {"n":"西方音乐赏析(3班) (人文艺术类-艺术类)","t":"许鹭佳","s":"周四9-10节(每周)(待定)(1-15周)","d":3,"b":9,"e":10,"raw":["西方音乐赏析(3班) (人文艺术类-艺术类)","2","1-15","许鹭佳","周四9-10节(每周)(待定)(1-15周)","73"]},
-  {"n":"西方音乐赏析(4班) (人文艺术类-艺术类)","t":"李丽莉","s":"周二7-8节(每周)(待定)(1-15周)","d":1,"b":7,"e":8,"raw":["西方音乐赏析(4班) (人文艺术类-艺术类)","2","1-15","李丽莉","周二7-8节(每周)(待定)(1-15周)","67"]},
-  {"n":"小提琴入门 (人文艺术类-艺术类)","t":"赵纯","s":"周二9-10节(每周)(学活#132)(1-15周)","d":1,"b":9,"e":10,"raw":["小提琴入门 (人文艺术类-艺术类)","2","1-15","赵纯","周二9-10节(每周)(学活#132)(1-15周)","10"]},
-  {"n":"硬笔书法(1班) (人文艺术类-艺术类)","t":"王占北","s":"周三3-4节(每周)(待定)(1-15周)","d":2,"b":3,"e":4,"raw":["硬笔书法(1班) (人文艺术类-艺术类)","2","1-15","王占北","周三3-4节(每周)(待定)(1-15周)","2"]},
-  {"n":"硬笔书法(2班) (人文艺术类-艺术类)","t":"王占北","s":"周四7-8节(每周)(待定)(1-15周)","d":3,"b":7,"e":8,"raw":["硬笔书法(2班) (人文艺术类-艺术类)","2","1-15","王占北","周四7-8节(每周)(待定)(1-15周)","12"]},
-  {"n":"硬笔书法(3班) (人文艺术类-艺术类)","t":"王占北","s":"周四9-10节(每周)(待定)(1-15周)","d":3,"b":9,"e":10,"raw":["硬笔书法(3班) (人文艺术类-艺术类)","2","1-15","王占北","周四9-10节(每周)(待定)(1-15周)","13"]},
-  {"n":"中国传统乐器概论 (人文艺术类-艺术类)","t":"张婷婷","s":"周四7-8节(每周)(待定)(1-15周)","d":3,"b":7,"e":8,"raw":["中国传统乐器概论 (人文艺术类-艺术类)","2","1-15","张婷婷","周四7-8节(每周)(待定)(1-15周)","74"]},
-  {"n":"中外建筑与园林艺术赏析 (人文艺术类-艺术类)","t":"孟晓鹏","s":"周二7-8节(每周)(待定)(1-15周)","d":1,"b":7,"e":8,"raw":["中外建筑与园林艺术赏析 (人文艺术类-艺术类)","2","1-15","孟晓鹏","周二7-8节(每周)(待定)(1-15周)","18"]},
-  {"n":"中外美术简史(1班) (人文艺术类-艺术类)","t":"侯思雨","s":"周四9-10节(每周)(待定)(1-15周)","d":3,"b":9,"e":10,"raw":["中外美术简史(1班) (人文艺术类-艺术类)","2","1-15","侯思雨","周四9-10节(每周)(待定)(1-15周)","43"]},
-  {"n":"中外美术简史(2班) (人文艺术类-艺术类)","t":"厉犇","s":"周四9-10节(每周)(待定)(1-15周)","d":3,"b":9,"e":10,"raw":["中外美术简史(2班) (人文艺术类-艺术类)","2","1-15","厉犇","周四9-10节(每周)(待定)(1-15周)","48"]},
-  {"n":"道德心理学(1班) (社会科学类-社会科学类)","t":"王瑞乐","s":"周三7-8节(每周)(待定)(1-15周)","d":2,"b":7,"e":8,"raw":["道德心理学(1班) (社会科学类-社会科学类)","2","1-15","王瑞乐","周三7-8节(每周)(待定)(1-15周)","19"]},
-  {"n":"道德心理学(2班) (社会科学类-社会科学类)","t":"王瑞乐","s":"周四9-10节(每周)(待定)(1-15周)","d":3,"b":9,"e":10,"raw":["道德心理学(2班) (社会科学类-社会科学类)","2","1-15","王瑞乐","周四9-10节(每周)(待定)(1-15周)","14"]},
-  {"n":"改变世界的经济学家(1班) (社会科学类-社会科学类)","t":"廖伶欣","s":"周四7-8节(每周)(待定)(1-15周)","d":3,"b":7,"e":8,"raw":["改变世界的经济学家(1班) (社会科学类-社会科学类)","2","1-15","廖伶欣","周四7-8节(每周)(待定)(1-15周)","45"]},
-  {"n":"改变世界的经济学家(2班) (社会科学类-社会科学类)","t":"廖伶欣","s":"周四9-10节(每周)(待定)(1-15周)","d":3,"b":9,"e":10,"raw":["改变世界的经济学家(2班) (社会科学类-社会科学类)","2","1-15","廖伶欣","周四9-10节(每周)(待定)(1-15周)","73"]},
-  {"n":"国际经济学引论 (社会科学类-社会科学类)","t":"陈思慎","s":"周二7-8节(每周)(待定)(1-15周)","d":1,"b":7,"e":8,"raw":["国际经济学引论 (社会科学类-社会科学类)","2","1-15","陈思慎","周二7-8节(每周)(待定)(1-15周)","76"]},
-  {"n":"婚姻家庭与继承法入门(1班) (社会科学类-社会科学类)","t":"常宝莲","s":"周四7-8节(每周)(待定)(1-15周)","d":3,"b":7,"e":8,"raw":["婚姻家庭与继承法入门(1班) (社会科学类-社会科学类)","2","1-15","常宝莲","周四7-8节(每周)(待定)(1-15周)","43"]},
-  {"n":"婚姻家庭与继承法入门(2班) (社会科学类-社会科学类)","t":"常宝莲","s":"周四9-10节(每周)(待定)(1-15周)","d":3,"b":9,"e":10,"raw":["婚姻家庭与继承法入门(2班) (社会科学类-社会科学类)","2","1-15","常宝莲","周四9-10节(每周)(待定)(1-15周)","64"]},
-  {"n":"经济学的世界 (社会科学类-社会科学类)","t":"廖汶钊","s":"周二9-10节(每周)(待定)(1-15周)","d":1,"b":9,"e":10,"raw":["经济学的世界 (社会科学类-社会科学类)","2","1-15","廖汶钊","周二9-10节(每周)(待定)(1-15周)","78"]},
-  {"n":"全球化与国际政治经济大变局 (社会科学类-社会科学类)","t":"王全红","s":"周二7-8节(每周)(待定)(1-15周)","d":1,"b":7,"e":8,"raw":["全球化与国际政治经济大变局 (社会科学类-社会科学类)","2","1-15","王全红","周二7-8节(每周)(待定)(1-15周)","59"]},
-  {"n":"人工智能经济学 (社会科学类-社会科学类)","t":"曾凡","s":"周二7-8节(每周)(待定)(1-15周)","d":1,"b":7,"e":8,"raw":["人工智能经济学 (社会科学类-社会科学类)","2","1-15","曾凡","周二7-8节(每周)(待定)(1-15周)","77"]},
-  {"n":"奢侈品与时尚品牌管理(2班) (社会科学类-社会科学类)","t":"陈婷婷","s":"周二7-8节(每周)(待定)(1-15周)","d":1,"b":7,"e":8,"raw":["奢侈品与时尚品牌管理(2班) (社会科学类-社会科学类)","2","1-15","陈婷婷","周二7-8节(每周)(待定)(1-15周)","6"]},
-  {"n":"社会心理学概论(2班) (社会科学类-社会科学类)","t":"郭治斌","s":"周三9-10节(每周)(待定)(1-15周)","d":2,"b":9,"e":10,"raw":["社会心理学概论(2班) (社会科学类-社会科学类)","2","1-15","郭治斌","周三9-10节(每周)(待定)(1-15周)","9"]},
-  {"n":"社会心理学概论(3班) (社会科学类-社会科学类)","t":"翁誉华","s":"周三3-4节(每周)(待定)(1-15周)","d":2,"b":3,"e":4,"raw":["社会心理学概论(3班) (社会科学类-社会科学类)","2","1-15","翁誉华","周三3-4节(每周)(待定)(1-15周)","55"]},
-  {"n":"社会心理学概论(4班) (社会科学类-社会科学类)","t":"翁誉华","s":"周三7-8节(每周)(待定)(1-15周)","d":2,"b":7,"e":8,"raw":["社会心理学概论(4班) (社会科学类-社会科学类)","2","1-15","翁誉华","周三7-8节(每周)(待定)(1-15周)","46"]},
-  {"n":"世界法律文化巡礼 (社会科学类-社会科学类)","t":"王思杰","s":"周二9-10节(每周)(待定)(1-15周)","d":1,"b":9,"e":10,"raw":["世界法律文化巡礼 (社会科学类-社会科学类)","2","1-15","王思杰","周二9-10节(每周)(待定)(1-15周)","52"]},
-  {"n":"数智时代的法律素养 (社会科学类-社会科学类)","t":"林玉芳","s":"周二9-10节(每周)(待定)(1-15周)","d":1,"b":9,"e":10,"raw":["数智时代的法律素养 (社会科学类-社会科学类)","2","1-15","林玉芳","周二9-10节(每周)(待定)(1-15周)","79"]},
-  {"n":"外汇知识入门 (社会科学类-社会科学类)","t":"黄洁(会)","s":"周二9-10节(每周)(待定)(1-15周)","d":1,"b":9,"e":10,"raw":["外汇知识入门 (社会科学类-社会科学类)","2","1-15","黄洁(会)","周二9-10节(每周)(待定)(1-15周)","73"]},
-  {"n":"文化心理学 (社会科学类-社会科学类)","t":"石舒雅","s":"周三9-10节(每周)(待定)(1-15周)","d":2,"b":9,"e":10,"raw":["文化心理学 (社会科学类-社会科学类)","2","1-15","石舒雅","周三9-10节(每周)(待定)(1-15周)","24"]},
-  {"n":"现代设计思维 (社会科学类-社会科学类)","t":"吴国荣","s":"周二9-10节(每周)(待定)(1-15周)","d":1,"b":9,"e":10,"raw":["现代设计思维 (社会科学类-社会科学类)","2","1-15","吴国荣","周二9-10节(每周)(待定)(1-15周)","57"]},
-  {"n":"新时代经济发展的密钥与未来 (社会科学类-社会科学类)","t":"郭宏","s":"周二9-10节(每周)(待定)(1-15周)","d":1,"b":9,"e":10,"raw":["新时代经济发展的密钥与未来 (社会科学类-社会科学类)","2","1-15","郭宏","周二9-10节(每周)(待定)(1-15周)","80"]},
-  {"n":"新时代幸福观(1班) (社会科学类-社会科学类)","t":"颜明健","s":"周二7-8节(每周)(经管#301)(1-15周)","d":1,"b":7,"e":8,"raw":["新时代幸福观(1班) (社会科学类-社会科学类)","2","1-15","颜明健","周二7-8节(每周)(经管#301)(1-15周)","6"]},
-  {"n":"新时代幸福观(2班) (社会科学类-社会科学类)","t":"颜明健","s":"周四7-8节(每周)(经管#301)(1-15周)","d":3,"b":7,"e":8,"raw":["新时代幸福观(2班) (社会科学类-社会科学类)","2","1-15","颜明健","周四7-8节(每周)(经管#301)(1-15周)","40"]},
-  {"n":"影视中的证券知识(1班) (社会科学类-社会科学类)","t":"陈晓松","s":"周四7-8节(每周)(待定)(1-15周)","d":3,"b":7,"e":8,"raw":["影视中的证券知识(1班) (社会科学类-社会科学类)","2","1-15","陈晓松","周四7-8节(每周)(待定)(1-15周)","52"]},
-  {"n":"政治哲学与现代社会 (社会科学类-社会科学类)","t":"占强","s":"周四7-8节(每周)(待定)(1-15周)","d":3,"b":7,"e":8,"raw":["政治哲学与现代社会 (社会科学类-社会科学类)","2","1-15","占强","周四7-8节(每周)(待定)(1-15周)","65"]},
-  {"n":"中华民族共同体概论(1班) (社会科学类-社会科学类)","t":"杨维周","s":"周二7-8节(每周)(待定)(1-15周)","d":1,"b":7,"e":8,"raw":["中华民族共同体概论(1班) (社会科学类-社会科学类)","2","1-15","杨维周","周二7-8节(每周)(待定)(1-15周)","78"]},
-  {"n":"中华民族共同体概论(2班) (社会科学类-社会科学类)","t":"杨维周","s":"周四7-8节(每周)(待定)(1-15周)","d":3,"b":7,"e":8,"raw":["中华民族共同体概论(2班) (社会科学类-社会科学类)","2","1-15","杨维周","周四7-8节(每周)(待定)(1-15周)","77"]},
-  {"n":"中外教育简史(1班) (社会科学类-社会科学类)","t":"周胜男","s":"周二7-8节(每周)(待定)(1-15周)","d":1,"b":7,"e":8,"raw":["中外教育简史(1班) (社会科学类-社会科学类)","2","1-15","周胜男","周二7-8节(每周)(待定)(1-15周)","38"]},
-  {"n":"中外教育简史(2班) (社会科学类-社会科学类)","t":"周胜男","s":"周二9-10节(每周)(待定)(1-15周)","d":1,"b":9,"e":10,"raw":["中外教育简史(2班) (社会科学类-社会科学类)","2","1-15","周胜男","周二9-10节(每周)(待定)(1-15周)","62"]},
-  {"n":"走进宪法 (社会科学类-社会科学类)","t":"陈雪琴","s":"周二7-8节(每周)(待定)(1-15周)","d":1,"b":7,"e":8,"raw":["走进宪法 (社会科学类-社会科学类)","2","1-15","陈雪琴","周二7-8节(每周)(待定)(1-15周)","77"]},
-  {"n":"化学与人类文明(2班) (自然科学类)","t":"吴江毅","s":"周四9-10节(每周)(待定)(1-15周)","d":3,"b":9,"e":10,"raw":["化学与人类文明(2班) (自然科学类)","2","1-15","吴江毅","周四9-10节(每周)(待定)(1-15周)","31"]},
-  {"n":"计算思维与计算机科学 (自然科学类)","t":"李瑞珠","s":"周二9-10节(每周)(待定)(1-15周)","d":1,"b":9,"e":10,"raw":["计算思维与计算机科学 (自然科学类)","2","1-15","李瑞珠","周二9-10节(每周)(待定)(1-15周)","50"]},
-  {"n":"计算与AI思维:走进数智科学 (自然科学类)","t":"王尔绂","s":"周四7-8节(每周)(待定)(1-15周)","d":3,"b":7,"e":8,"raw":["计算与AI思维:走进数智科学 (自然科学类)","2","1-15","王尔绂","周四7-8节(每周)(待定)(1-15周)","64"]},
-  {"n":"建筑消防安全(2班) (自然科学类)","t":"薛艳霞","s":"周四9-10节(每周)(待定)(1-15周)","d":3,"b":9,"e":10,"raw":["建筑消防安全(2班) (自然科学类)","2","1-15","薛艳霞","周四9-10节(每周)(待定)(1-15周)","11"]},
-  {"n":"力学世界 (自然科学类)","t":"贾檀","s":"周四7-8节(每周)(待定)(1-15周)","d":3,"b":7,"e":8,"raw":["力学世界 (自然科学类)","2","1-15","贾檀","周四7-8节(每周)(待定)(1-15周)","33"]},
-  {"n":"区块链应用技术基础 (自然科学类)","t":"詹志超","s":"周四7-8节(每周)(待定)(1-15周)","d":3,"b":7,"e":8,"raw":["区块链应用技术基础 (自然科学类)","2","1-15","詹志超","周四7-8节(每周)(待定)(1-15周)","60"]},
-  {"n":"神奇的材料世界 (自然科学类)","t":"吴悦","s":"周四9-10节(每周)(待定)(1-15周)","d":3,"b":9,"e":10,"raw":["神奇的材料世界 (自然科学类)","2","1-15","吴悦","周四9-10节(每周)(待定)(1-15周)","4"]},
-  {"n":"生命科学史(1班) (自然科学类)","t":"乔红梅","s":"周二9-10节(每周)(待定)(1-15周)","d":1,"b":9,"e":10,"raw":["生命科学史(1班) (自然科学类)","2","1-15","乔红梅","周二9-10节(每周)(待定)(1-15周)","26"]},
-  {"n":"生命科学史(2班) (自然科学类)","t":"乔红梅","s":"周二7-8节(每周)(待定)(1-15周)","d":1,"b":7,"e":8,"raw":["生命科学史(2班) (自然科学类)","2","1-15","乔红梅","周二7-8节(每周)(待定)(1-15周)","3"]},
-  {"n":"数学史 (自然科学类)","t":"陈洪科","s":"周四7-8节(每周)(待定)(1-15周)","d":3,"b":7,"e":8,"raw":["数学史 (自然科学类)","2","1-15","陈洪科","周四7-8节(每周)(待定)(1-15周)","44"]},
-  {"n":"物理与艺术 (自然科学类)","t":"蔡兆晖","s":"周四7-8节(每周)(待定)(1-15周)","d":3,"b":7,"e":8,"raw":["物理与艺术 (自然科学类)","2","1-15","蔡兆晖","周四7-8节(每周)(待定)(1-15周)","45"]},
-  {"n":"新能源技术与应用 (自然科学类)","t":"周书伟","s":"周四7-8节(每周)(待定)(1-15周)","d":3,"b":7,"e":8,"raw":["新能源技术与应用 (自然科学类)","2","1-15","周书伟","周四7-8节(每周)(待定)(1-15周)","32"]}
-        ]
+  {"n":"德语入门(1班) (语言技能类)","t":"王玥巍","s":"周二7-8节(每周)(待定)(1-16周)","d":1,"b":7,"e":8,"raw":["德语入门(1班) (语言技能类)","2","1-16","王玥巍","周二7-8节(每周)(待定)(1-16周)","40"]},
+  {"n":"德语入门(2班) (语言技能类)","t":"王玥巍","s":"周四7-8节(每周)(待定)(1-16周)","d":3,"b":7,"e":8,"raw":["德语入门(2班) (语言技能类)","2","1-16","王玥巍","周四7-8节(每周)(待定)(1-16周)","40"]},
+  {"n":"俄语入门 (语言技能类)","t":"杨波(法)","s":"周二7-8节(每周)(待定)(1-16周)","d":1,"b":7,"e":8,"raw":["俄语入门 (语言技能类)","2","1-16","杨波(法)","周二7-8节(每周)(待定)(1-16周)","40"]},
+  {"n":"法语入门(1班) (语言技能类)","t":"高仁仁","s":"周四7-8节(每周)(待定)(1-16周)","d":3,"b":7,"e":8,"raw":["法语入门(1班) (语言技能类)","2","1-16","高仁仁","周四7-8节(每周)(待定)(1-16周)","40"]},
+  {"n":"法语入门(2班) (语言技能类)","t":"高仁仁","s":"周四9-10节(每周)(待定)(1-16周)","d":3,"b":9,"e":10,"raw":["法语入门(2班) (语言技能类)","2","1-16","高仁仁","周四9-10节(每周)(待定)(1-16周)","40"]},
+  {"n":"韩国语入门 (语言技能类)","t":"李英玉","s":"周四9-10节(每周)(待定)(1-16周)","d":3,"b":9,"e":10,"raw":["韩国语入门 (语言技能类)","2","1-16","李英玉","周四9-10节(每周)(待定)(1-16周)","40"]},
+  {"n":"剑桥商务英语(高级)(1班) (语言技能类)","t":"何康民","s":"周四7-8节(每周)(待定)(1-16周)","d":3,"b":7,"e":8,"raw":["剑桥商务英语(高级)(1班) (语言技能类)","2","1-16","何康民","周四7-8节(每周)(待定)(1-16周)","40"]},
+  {"n":"剑桥商务英语(高级)(2班) (语言技能类)","t":"何康民","s":"周四9-10节(每周)(待定)(1-16周)","d":3,"b":9,"e":10,"raw":["剑桥商务英语(高级)(2班) (语言技能类)","2","1-16","何康民","周四9-10节(每周)(待定)(1-16周)","40"]},
+  {"n":"剑桥商务英语(中级)(1班) (语言技能类)","t":"何康民","s":"周二7-8节(每周)(待定)(1-16周)","d":1,"b":7,"e":8,"raw":["剑桥商务英语(中级)(1班) (语言技能类)","2","1-16","何康民","周二7-8节(每周)(待定)(1-16周)","40"]},
+  {"n":"剑桥商务英语(中级)(2班) (语言技能类)","t":"何康民","s":"周二9-10节(每周)(待定)(1-16周)","d":1,"b":9,"e":10,"raw":["剑桥商务英语(中级)(2班) (语言技能类)","2","1-16","何康民","周二9-10节(每周)(待定)(1-16周)","40"]},
+  {"n":"林语堂英文作品选读 (语言技能类)","t":"陈智淦","s":"周四7-8节(每周)(待定)(1-16周)","d":3,"b":7,"e":8,"raw":["林语堂英文作品选读 (语言技能类)","2","1-16","陈智淦","周四7-8节(每周)(待定)(1-16周)","40"]},
+  {"n":"旅游法语 (语言技能类)","t":"高仁仁","s":"周二7-8节(每周)(待定)(1-16周)","d":1,"b":7,"e":8,"raw":["旅游法语 (语言技能类)","2","1-16","高仁仁","周二7-8节(每周)(待定)(1-16周)","40"]},
+  {"n":"日语入门(1班) (语言技能类)","t":"黄旭","s":"周二7-8节(每周)(待定)(1-16周)","d":1,"b":7,"e":8,"raw":["日语入门(1班) (语言技能类)","2","1-16","黄旭","周二7-8节(每周)(待定)(1-16周)","40"]},
+  {"n":"日语入门(2班) (语言技能类)","t":"陈霞明","s":"周二9-10节(每周)(待定)(1-16周)","d":1,"b":9,"e":10,"raw":["日语入门(2班) (语言技能类)","2","1-16","陈霞明","周二9-10节(每周)(待定)(1-16周)","40"]},
+  {"n":"日语入门(3班) (语言技能类)","t":"林筱","s":"周四7-8节(每周)(待定)(1-16周)","d":3,"b":7,"e":8,"raw":["日语入门(3班) (语言技能类)","2","1-16","林筱","周四7-8节(每周)(待定)(1-16周)","40"]},
+  {"n":"日语入门(4班) (语言技能类)","t":"张麟声","s":"周四7-8节(每周)(待定)(1-16周)","d":3,"b":7,"e":8,"raw":["日语入门(4班) (语言技能类)","2","1-16","张麟声","周四7-8节(每周)(待定)(1-16周)","40"]},
+  {"n":"日语入门(5班) (语言技能类)","t":"张麟声","s":"周四9-10节(每周)(待定)(1-16周)","d":3,"b":9,"e":10,"raw":["日语入门(5班) (语言技能类)","2","1-16","张麟声","周四9-10节(每周)(待定)(1-16周)","40"]},
+  {"n":"日语入门(6班) (语言技能类)","t":"商钟岚","s":"周二9-10节(每周)(待定)(1-16周)","d":1,"b":9,"e":10,"raw":["日语入门(6班) (语言技能类)","2","1-16","商钟岚","周二9-10节(每周)(待定)(1-16周)","40"]},
+  {"n":"日语入门(7班) (语言技能类)","t":"姚阿玲","s":"周二7-8节(每周)(待定)(1-16周)","d":1,"b":7,"e":8,"raw":["日语入门(7班) (语言技能类)","2","1-16","姚阿玲","周二7-8节(每周)(待定)(1-16周)","40"]},
+  {"n":"日语视听说Ⅰ (语言技能类)","t":"林筱","s":"周二7-8节(每周)(待定)(1-16周)","d":1,"b":7,"e":8,"raw":["日语视听说Ⅰ (语言技能类)","2","1-16","林筱","周二7-8节(每周)(待定)(1-16周)","40"]},
+  {"n":"日语视听说Ⅱ (语言技能类)","t":"邹乃馨","s":"周四7-8节(每周)(待定)(1-16周)","d":3,"b":7,"e":8,"raw":["日语视听说Ⅱ (语言技能类)","2","1-16","邹乃馨","周四7-8节(每周)(待定)(1-16周)","40"]},
+  {"n":"实用翻译技能 (语言技能类)","t":"余胜","s":"周二9-10节(每周)(待定)(1-16周)","d":1,"b":9,"e":10,"raw":["实用翻译技能 (语言技能类)","2","1-16","余胜","周二9-10节(每周)(待定)(1-16周)","40"]},
+  {"n":"西班牙语入门Ⅰ(1班) (语言技能类)","t":"Steven Champion Gauntt","s":"周四7-8节(每周)(待定)(1-16周)","d":3,"b":7,"e":8,"raw":["西班牙语入门Ⅰ(1班) (语言技能类)","2","1-16","Steven Champion Gauntt","周四7-8节(每周)(待定)(1-16周)","40"]},
+  {"n":"西班牙语入门Ⅰ(2班) (语言技能类)","t":"Steven Champion Gauntt","s":"周四9-10节(每周)(待定)(1-16周)","d":3,"b":9,"e":10,"raw":["西班牙语入门Ⅰ(2班) (语言技能类)","2","1-16","Steven Champion Gauntt","周四9-10节(每周)(待定)(1-16周)","40"]},
+  {"n":"西班牙语入门Ⅰ(3班) (语言技能类)","t":"Steven Champion Gauntt","s":"周五5-6节(每周)(待定)(1-16周)","d":4,"b":5,"e":6,"raw":["西班牙语入门Ⅰ(3班) (语言技能类)","2","1-16","Steven Champion Gauntt","周五5-6节(每周)(待定)(1-16周)","40"]},
+  {"n":"写作与修辞 (语言技能类)","t":"张翠真","s":"周二9-10节(每周)(待定)(1-16周)","d":1,"b":9,"e":10,"raw":["写作与修辞 (语言技能类)","2","1-16","张翠真","周二9-10节(每周)(待定)(1-16周)","40"]},
+  {"n":"演讲与口才(1班) (语言技能类)","t":"罗炜","s":"周二7-8节(每周)(待定)(1-16周)","d":1,"b":7,"e":8,"raw":["演讲与口才(1班) (语言技能类)","2","1-16","罗炜","周二7-8节(每周)(待定)(1-16周)","40"]},
+  {"n":"演讲与口才(2班) (语言技能类)","t":"罗炜","s":"周二9-10节(每周)(待定)(1-16周)","d":1,"b":9,"e":10,"raw":["演讲与口才(2班) (语言技能类)","2","1-16","罗炜","周二9-10节(每周)(待定)(1-16周)","40"]},
+  {"n":"演员台词基础 (语言技能类)","t":"杨健","s":"周二9-10节(每周)(待定)(1-16周)","d":1,"b":9,"e":10,"raw":["演员台词基础 (语言技能类)","2","1-16","杨健","周二9-10节(每周)(待定)(1-16周)","40"]},
+  {"n":"英语视听训练(1班) (语言技能类)","t":"黄丽香","s":"周二9-10节(每周)(待定)(1-16周)","d":1,"b":9,"e":10,"raw":["英语视听训练(1班) (语言技能类)","2","1-16","黄丽香","周二9-10节(每周)(待定)(1-16周)","40"]},
+  {"n":"英语视听训练(2班) (语言技能类)","t":"邓帆","s":"周二9-10节(每周)(待定)(1-16周)","d":1,"b":9,"e":10,"raw":["英语视听训练(2班) (语言技能类)","2","1-16","邓帆","周二9-10节(每周)(待定)(1-16周)","40"]},
+  {"n":"英语戏剧艺术表演实践(英文授课)(1班) (语言技能类)","t":"Steven Champion Gauntt","s":"周二7-8节(每周)(待定)(1-16周)","d":1,"b":7,"e":8,"raw":["英语戏剧艺术表演实践(英文授课)(1班) (语言技能类)","2","1-16","Steven Champion Gauntt","周二7-8节(每周)(待定)(1-16周)","25"]},
+  {"n":"英语戏剧艺术表演实践(英文授课)(2班) (语言技能类)","t":"Steven Champion Gauntt","s":"周二9-10节(每周)(待定)(1-16周)","d":1,"b":9,"e":10,"raw":["英语戏剧艺术表演实践(英文授课)(2班) (语言技能类)","2","1-16","Steven Champion Gauntt","周二9-10节(每周)(待定)(1-16周)","25"]},
+  {"n":"英语新闻视听Ⅰ (语言技能类)","t":"胡豫","s":"周四9-10节(每周)(待定)(1-16周)","d":3,"b":9,"e":10,"raw":["英语新闻视听Ⅰ (语言技能类)","2","1-16","胡豫","周四9-10节(每周)(待定)(1-16周)","40"]},
+  {"n":"英语演讲入门(英文授课) (语言技能类)","t":"田德新","s":"周二7-8节(每周)(待定)(1-16周)","d":1,"b":7,"e":8,"raw":["英语演讲入门(英文授课) (语言技能类)","2","1-16","田德新","周二7-8节(每周)(待定)(1-16周)","40"]},
+  {"n":"英语应用文写作(1班) (语言技能类)","t":"王淑娥","s":"周四7-8节(每周)(待定)(1-16周)","d":3,"b":7,"e":8,"raw":["英语应用文写作(1班) (语言技能类)","2","1-16","王淑娥","周四7-8节(每周)(待定)(1-16周)","40"]},
+  {"n":"英语应用文写作(2班) (语言技能类)","t":"王淑娥","s":"周四9-10节(每周)(待定)(1-16周)","d":3,"b":9,"e":10,"raw":["英语应用文写作(2班) (语言技能类)","2","1-16","王淑娥","周四9-10节(每周)(待定)(1-16周)","40"]},
+  {"n":"应用文写作(1班) (语言技能类)","t":"何竞平","s":"周四7-8节(每周)(待定)(1-16周)","d":3,"b":7,"e":8,"raw":["应用文写作(1班) (语言技能类)","2","1-16","何竞平","周四7-8节(每周)(待定)(1-16周)","40"]},
+  {"n":"应用文写作(2班) (语言技能类)","t":"何竞平","s":"周四9-10节(每周)(待定)(1-16周)","d":3,"b":9,"e":10,"raw":["应用文写作(2班) (语言技能类)","2","1-16","何竞平","周四9-10节(每周)(待定)(1-16周)","40"]},
+  {"n":"应用文写作(3班) (语言技能类)","t":"郭蔚臻","s":"周四7-8节(每周)(待定)(1-16周)","d":3,"b":7,"e":8,"raw":["应用文写作(3班) (语言技能类)","2","1-16","郭蔚臻","周四7-8节(每周)(待定)(1-16周)","40"]},
+  {"n":"影视歌英语口语与文化(英文授课)(1班) (语言技能类)","t":"Karen Ke Li","s":"周二7-8节(每周)(待定)(1-16周)","d":1,"b":7,"e":8,"raw":["影视歌英语口语与文化(英文授课)(1班) (语言技能类)","2","1-16","Karen Ke Li","周二7-8节(每周)(待定)(1-16周)","40"]},
+  {"n":"影视歌英语口语与文化(英文授课)(2班) (语言技能类)","t":"Karen Ke Li","s":"周二9-10节(每周)(待定)(1-16周)","d":1,"b":9,"e":10,"raw":["影视歌英语口语与文化(英文授课)(2班) (语言技能类)","2","1-16","Karen Ke Li","周二9-10节(每周)(待定)(1-16周)","40"]},
+  {"n":"影视歌英语口语与文化(英文授课)(3班) (语言技能类)","t":"Karen Ke Li","s":"周三3-4节(每周)(待定)(1-16周)","d":2,"b":3,"e":4,"raw":["影视歌英语口语与文化(英文授课)(3班) (语言技能类)","2","1-16","Karen Ke Li","周三3-4节(每周)(待定)(1-16周)","40"]},
+  {"n":"影视歌英语口语与文化(英文授课)(4班) (语言技能类)","t":"Karen Ke Li","s":"周三7-8节(每周)(待定)(1-16周)","d":2,"b":7,"e":8,"raw":["影视歌英语口语与文化(英文授课)(4班) (语言技能类)","2","1-16","Karen Ke Li","周三7-8节(每周)(待定)(1-16周)","40"]},
+  {"n":"影视歌英语口语与文化(英文授课)(5班) (语言技能类)","t":"Justin J Ferrell","s":"周四9-10节(每周)(待定)(1-16周)","d":3,"b":9,"e":10,"raw":["影视歌英语口语与文化(英文授课)(5班) (语言技能类)","2","1-16","Justin J Ferrell","周四9-10节(每周)(待定)(1-16周)","40"]},
+  {"n":"AI图像技术应用基础(1班) (计算机技能类)","t":"鞠然子","s":"周二7-8节(每周)(待定)(1-16周)","d":1,"b":7,"e":8,"raw":["AI图像技术应用基础(1班) (计算机技能类)","2","1-16","鞠然子","周二7-8节(每周)(待定)(1-16周)","40"]},
+  {"n":"AI图像技术应用基础(2班) (计算机技能类)","t":"鞠然子","s":"周二9-10节(每周)(待定)(1-16周)","d":1,"b":9,"e":10,"raw":["AI图像技术应用基础(2班) (计算机技能类)","2","1-16","鞠然子","周二9-10节(每周)(待定)(1-16周)","40"]},
+  {"n":"AI图像技术应用基础(3班) (计算机技能类)","t":"梁逸晟","s":"周一1-2节(每周)(待定)(1-16周)","d":0,"b":1,"e":2,"raw":["AI图像技术应用基础(3班) (计算机技能类)","2","1-16","梁逸晟","周一1-2节(每周)(待定)(1-16周)","40"]},
+  {"n":"AI图像技术应用基础(4班) (计算机技能类)","t":"梁逸晟","s":"周一5-6节(每周)(待定)(1-16周)","d":0,"b":5,"e":6,"raw":["AI图像技术应用基础(4班) (计算机技能类)","2","1-16","梁逸晟","周一5-6节(每周)(待定)(1-16周)","40"]},
+  {"n":"Access数据库设计技术 (计算机技能类)","t":"李瑞珠","s":"周四9-10节(每周)(待定)(1-16周)","d":3,"b":9,"e":10,"raw":["Access数据库设计技术 (计算机技能类)","2","1-16","李瑞珠","周四9-10节(每周)(待定)(1-16周)","60"]},
+  {"n":"Arduino智能控制虚拟仿真入门 (计算机技能类)","t":"罗玉元","s":"周二7-8节(每周)(待定)(1-16周)","d":1,"b":7,"e":8,"raw":["Arduino智能控制虚拟仿真入门 (计算机技能类)","2","1-16","罗玉元","周二7-8节(每周)(待定)(1-16周)","40"]},
+  {"n":"Cimatron工业产品造型设计 (计算机技能类)","t":"张文琼","s":"周四9-10节(每周)(待定)(1-16周)","d":3,"b":9,"e":10,"raw":["Cimatron工业产品造型设计 (计算机技能类)","2","1-16","张文琼","周四9-10节(每周)(待定)(1-16周)","60"]},
+  {"n":"DV剪辑入门(1班) (计算机技能类)","t":"杜文超","s":"周二7-8节(每周)(待定)(1-16周)","d":1,"b":7,"e":8,"raw":["DV剪辑入门(1班) (计算机技能类)","2","1-16","杜文超","周二7-8节(每周)(待定)(1-16周)","60"]},
+  {"n":"DV剪辑入门(2班) (计算机技能类)","t":"杜文超","s":"周二9-10节(每周)(待定)(1-16周)","d":1,"b":9,"e":10,"raw":["DV剪辑入门(2班) (计算机技能类)","2","1-16","杜文超","周二9-10节(每周)(待定)(1-16周)","60"]},
+  {"n":"DV剪辑入门(3班) (计算机技能类)","t":"杜文超","s":"周四7-8节(每周)(待定)(1-16周)","d":3,"b":7,"e":8,"raw":["DV剪辑入门(3班) (计算机技能类)","2","1-16","杜文超","周四7-8节(每周)(待定)(1-16周)","60"]},
+  {"n":"DV剪辑入门(4班) (计算机技能类)","t":"杜文超","s":"周四9-10节(每周)(待定)(1-16周)","d":3,"b":9,"e":10,"raw":["DV剪辑入门(4班) (计算机技能类)","2","1-16","杜文超","周四9-10节(每周)(待定)(1-16周)","60"]},
+  {"n":"Office办公软件高级应用 (计算机技能类)","t":"Chen Kefu","s":"周二7-8节(每周)(待定)(1-16周)","d":1,"b":7,"e":8,"raw":["Office办公软件高级应用 (计算机技能类)","2","1-16","Chen Kefu","周二7-8节(每周)(待定)(1-16周)","60"]},
+  {"n":"Python程序设计入门(1班) (计算机技能类)","t":"翁祖峰","s":"周二7-8节(每周)(待定)(1-16周)","d":1,"b":7,"e":8,"raw":["Python程序设计入门(1班) (计算机技能类)","2","1-16","翁祖峰","周二7-8节(每周)(待定)(1-16周)","60"]},
+  {"n":"Python程序设计入门(2班) (计算机技能类)","t":"王华敏","s":"周四7-8节(每周)(待定)(1-16周)","d":3,"b":7,"e":8,"raw":["Python程序设计入门(2班) (计算机技能类)","2","1-16","王华敏","周四7-8节(每周)(待定)(1-16周)","60"]},
+  {"n":"Python程序设计入门(3班) (计算机技能类)","t":"王晓东","s":"周四7-8节(每周)(待定)(1-16周)","d":3,"b":7,"e":8,"raw":["Python程序设计入门(3班) (计算机技能类)","2","1-16","王晓东","周四7-8节(每周)(待定)(1-16周)","60"]},
+  {"n":"Python程序设计入门(4班) (计算机技能类)","t":"王晓东","s":"周四9-10节(每周)(待定)(1-16周)","d":3,"b":9,"e":10,"raw":["Python程序设计入门(4班) (计算机技能类)","2","1-16","王晓东","周四9-10节(每周)(待定)(1-16周)","60"]},
+  {"n":"基于人工智能工具的视频编辑 (计算机技能类)","t":"胡广洲","s":"周四7-8节(每周)(待定)(1-16周)","d":3,"b":7,"e":8,"raw":["基于人工智能工具的视频编辑 (计算机技能类)","2","1-16","胡广洲","周四7-8节(每周)(待定)(1-16周)","60"]},
+  {"n":"计算机辅助平面绘图(1班) (计算机技能类)","t":"陈可坚","s":"周二9-10节(每周)(待定)(1-16周)","d":1,"b":9,"e":10,"raw":["计算机辅助平面绘图(1班) (计算机技能类)","2","1-16","陈可坚","周二9-10节(每周)(待定)(1-16周)","60"]},
+  {"n":"计算机辅助平面绘图(2班) (计算机技能类)","t":"陈松平","s":"周四7-8节(每周)(待定)(1-16周)","d":3,"b":7,"e":8,"raw":["计算机辅助平面绘图(2班) (计算机技能类)","2","1-16","陈松平","周四7-8节(每周)(待定)(1-16周)","60"]},
+  {"n":"计算机辅助三维造型设计(1班) (计算机技能类)","t":"洪瑛杰","s":"周四7-8节(每周)(待定)(1-16周)","d":3,"b":7,"e":8,"raw":["计算机辅助三维造型设计(1班) (计算机技能类)","2","1-16","洪瑛杰","周四7-8节(每周)(待定)(1-16周)","60"]},
+  {"n":"计算机辅助三维造型设计(2班) (计算机技能类)","t":"陈松平","s":"周二7-8节(每周)(待定)(1-16周)","d":1,"b":7,"e":8,"raw":["计算机辅助三维造型设计(2班) (计算机技能类)","2","1-16","陈松平","周二7-8节(每周)(待定)(1-16周)","60"]},
+  {"n":"人工智能基础与应用 (计算机技能类)","t":"李力","s":"周二9-10节(每周)(待定)(1-16周)","d":1,"b":9,"e":10,"raw":["人工智能基础与应用 (计算机技能类)","2","1-16","李力","周二9-10节(每周)(待定)(1-16周)","60"]},
+  {"n":"数据分析入门 (计算机技能类)","t":"姚景龙","s":"周二7-8节(每周)(待定)(1-16周)","d":1,"b":7,"e":8,"raw":["数据分析入门 (计算机技能类)","2","1-16","姚景龙","周二7-8节(每周)(待定)(1-16周)","60"]},
+  {"n":"数智空间设计 (计算机技能类)","t":"李建晶","s":"周二9-10节(每周)(待定)(1-16周)","d":1,"b":9,"e":10,"raw":["数智空间设计 (计算机技能类)","2","1-16","李建晶","周二9-10节(每周)(待定)(1-16周)","60"]},
+  {"n":"微信小程序开发入门(1班) (计算机技能类)","t":"陈彩云","s":"周二7-8节(每周)(待定)(1-16周)","d":1,"b":7,"e":8,"raw":["微信小程序开发入门(1班) (计算机技能类)","2","1-16","陈彩云","周二7-8节(每周)(待定)(1-16周)","60"]},
+  {"n":"微信小程序开发入门(2班) (计算机技能类)","t":"王华敏","s":"周四9-10节(每周)(待定)(1-16周)","d":3,"b":9,"e":10,"raw":["微信小程序开发入门(2班) (计算机技能类)","2","1-16","王华敏","周四9-10节(每周)(待定)(1-16周)","60"]},
+  {"n":"大学生就业法律实务(1班) (职业技能类-职业技能类)","t":"李晏","s":"周四7-8节(每周)(待定)(1-16周)","d":3,"b":7,"e":8,"raw":["大学生就业法律实务(1班) (职业技能类-职业技能类)","2","1-16","李晏","周四7-8节(每周)(待定)(1-16周)","80"]},
+  {"n":"大学生就业法律实务(2班) (职业技能类-职业技能类)","t":"李晏","s":"周四9-10节(每周)(待定)(1-16周)","d":3,"b":9,"e":10,"raw":["大学生就业法律实务(2班) (职业技能类-职业技能类)","2","1-16","李晏","周四9-10节(每周)(待定)(1-16周)","80"]},
+  {"n":"大学生就业法律实务(3班) (职业技能类-职业技能类)","t":"曲秋实","s":"周二7-8节(每周)(待定)(1-16周)","d":1,"b":7,"e":8,"raw":["大学生就业法律实务(3班) (职业技能类-职业技能类)","2","1-16","曲秋实","周二7-8节(每周)(待定)(1-16周)","80"]},
+  {"n":"多媒体教学课件设计 (职业技能类-职业技能类)","t":"张海波","s":"周二9-10节(每周)(主1#319)(1-16周)","d":1,"b":9,"e":10,"raw":["多媒体教学课件设计 (职业技能类-职业技能类)","2","1-16","张海波","周二9-10节(每周)(主1#319)(1-16周)","40"]},
+  {"n":"公关语言艺术(1班) (职业技能类-职业技能类)","t":"林海鹰","s":"周二7-8节(每周)(待定)(1-16周)","d":1,"b":7,"e":8,"raw":["公关语言艺术(1班) (职业技能类-职业技能类)","2","1-16","林海鹰","周二7-8节(每周)(待定)(1-16周)","80"]},
+  {"n":"公关语言艺术(2班) (职业技能类-职业技能类)","t":"林海鹰","s":"周二9-10节(每周)(待定)(1-16周)","d":1,"b":9,"e":10,"raw":["公关语言艺术(2班) (职业技能类-职业技能类)","2","1-16","林海鹰","周二9-10节(每周)(待定)(1-16周)","80"]},
+  {"n":"公关语言艺术(3班) (职业技能类-职业技能类)","t":"林海鹰","s":"周三1-2节(每周)(待定)(1-16周)","d":2,"b":1,"e":2,"raw":["公关语言艺术(3班) (职业技能类-职业技能类)","2","1-16","林海鹰","周三1-2节(每周)(待定)(1-16周)","80"]},
+  {"n":"公关语言艺术(4班) (职业技能类-职业技能类)","t":"林海鹰","s":"周三7-8节(每周)(待定)(1-16周)","d":2,"b":7,"e":8,"raw":["公关语言艺术(4班) (职业技能类-职业技能类)","2","1-16","林海鹰","周三7-8节(每周)(待定)(1-16周)","80"]},
+  {"n":"互联网时代的花艺美学 (职业技能类-职业技能类)","t":"方志鑫","s":"周二7-8节(每周)(主1#101)(1-4周)(方志鑫)","d":1,"b":7,"e":8,"raw":["互联网时代的花艺美学 (职业技能类-职业技能类)","2","1-16","方志鑫","周二7-8节(每周)(主1#101)(1-4周)(方志鑫)","30"]},
+  {"n":"互联网时代的精致咖啡(1班) (职业技能类-职业技能类)","t":"方志鑫","s":"周四7-8节(每周)(主1#101)(1-4周)(方志鑫)","d":3,"b":7,"e":8,"raw":["互联网时代的精致咖啡(1班) (职业技能类-职业技能类)","2","1-16","方志鑫","周四7-8节(每周)(主1#101)(1-4周)(方志鑫)","30"]},
+  {"n":"互联网时代的精致咖啡(2班) (职业技能类-职业技能类)","t":"方志鑫","s":"周四9-10节(每周)(主1#101)(1-4周)(方志鑫)","d":3,"b":9,"e":10,"raw":["互联网时代的精致咖啡(2班) (职业技能类-职业技能类)","2","1-16","方志鑫","周四9-10节(每周)(主1#101)(1-4周)(方志鑫)","30"]},
+  {"n":"教育学(1班) (职业技能类-职业技能类)","t":"周胜男","s":"周四7-8节(每周)(待定)(1-16周)","d":3,"b":7,"e":8,"raw":["教育学(1班) (职业技能类-职业技能类)","2","1-16","周胜男","周四7-8节(每周)(待定)(1-16周)","80"]},
+  {"n":"教育学(2班) (职业技能类-职业技能类)","t":"周胜男","s":"周四9-10节(每周)(待定)(1-16周)","d":3,"b":9,"e":10,"raw":["教育学(2班) (职业技能类-职业技能类)","2","1-16","周胜男","周四9-10节(每周)(待定)(1-16周)","80"]},
+  {"n":"教育学(3班) (职业技能类-职业技能类)","t":"周胜男","s":"周三3-4节(每周)(待定)(1-16周)","d":2,"b":3,"e":4,"raw":["教育学(3班) (职业技能类-职业技能类)","2","1-16","周胜男","周三3-4节(每周)(待定)(1-16周)","80"]},
+  {"n":"教育学(4班) (职业技能类-职业技能类)","t":"周胜男","s":"周三7-8节(每周)(待定)(1-16周)","d":2,"b":7,"e":8,"raw":["教育学(4班) (职业技能类-职业技能类)","2","1-16","周胜男","周三7-8节(每周)(待定)(1-16周)","80"]},
+  {"n":"咖啡馆投创与管理 (职业技能类-职业技能类)","t":"张彩霞","s":"周二7-8节(单周)(经管#314)(1周)(黄俊毅)","d":1,"b":7,"e":8,"raw":["咖啡馆投创与管理 (职业技能类-职业技能类)","2","1-16","张彩霞","周二7-8节(单周)(经管#314)(1周)(黄俊毅)","45"]},
+  {"n":"葡萄酒品鉴与管理 (职业技能类-职业技能类)","t":"周文仕","s":"周四7-8节(每周)(经管#314)(1-16周)","d":3,"b":7,"e":8,"raw":["葡萄酒品鉴与管理 (职业技能类-职业技能类)","2","1-16","周文仕","周四7-8节(每周)(经管#314)(1-16周)","45"]},
+  {"n":"商务沟通与人际关系(1班) (职业技能类-职业技能类)","t":"黄振谊","s":"周二7-8节(每周)(待定)(1-16周)","d":1,"b":7,"e":8,"raw":["商务沟通与人际关系(1班) (职业技能类-职业技能类)","2","1-16","黄振谊","周二7-8节(每周)(待定)(1-16周)","60"]},
+  {"n":"商务沟通与人际关系(2班) (职业技能类-职业技能类)","t":"黄振谊","s":"周二9-10节(每周)(待定)(1-16周)","d":1,"b":9,"e":10,"raw":["商务沟通与人际关系(2班) (职业技能类-职业技能类)","2","1-16","黄振谊","周二9-10节(每周)(待定)(1-16周)","60"]},
+  {"n":"商务沟通与人际关系(3班) (职业技能类-职业技能类)","t":"黄振谊","s":"周四7-8节(每周)(待定)(1-16周)","d":3,"b":7,"e":8,"raw":["商务沟通与人际关系(3班) (职业技能类-职业技能类)","2","1-16","黄振谊","周四7-8节(每周)(待定)(1-16周)","60"]},
+  {"n":"社交礼仪(1班) (职业技能类-职业技能类)","t":"步会敏","s":"周二7-8节(每周)(待定)(1-16周)","d":1,"b":7,"e":8,"raw":["社交礼仪(1班) (职业技能类-职业技能类)","2","1-16","步会敏","周二7-8节(每周)(待定)(1-16周)","80"]},
+  {"n":"社交礼仪(2班) (职业技能类-职业技能类)","t":"步会敏","s":"周二9-10节(每周)(待定)(1-16周)","d":1,"b":9,"e":10,"raw":["社交礼仪(2班) (职业技能类-职业技能类)","2","1-16","步会敏","周二9-10节(每周)(待定)(1-16周)","80"]},
+  {"n":"社交礼仪(3班) (职业技能类-职业技能类)","t":"步会敏","s":"周四7-8节(每周)(待定)(1-16周)","d":3,"b":7,"e":8,"raw":["社交礼仪(3班) (职业技能类-职业技能类)","2","1-16","步会敏","周四7-8节(每周)(待定)(1-16周)","80"]},
+  {"n":"社交礼仪(4班) (职业技能类-职业技能类)","t":"张彩霞","s":"周四7-8节(每周)(待定)(1-16周)","d":3,"b":7,"e":8,"raw":["社交礼仪(4班) (职业技能类-职业技能类)","2","1-16","张彩霞","周四7-8节(每周)(待定)(1-16周)","80"]},
+  {"n":"社交礼仪(5班) (职业技能类-职业技能类)","t":"刘沧","s":"周四9-10节(每周)(待定)(1-16周)","d":3,"b":9,"e":10,"raw":["社交礼仪(5班) (职业技能类-职业技能类)","2","1-16","刘沧","周四9-10节(每周)(待定)(1-16周)","80"]},
+  {"n":"社交礼仪(6班) (职业技能类-职业技能类)","t":"赵伟晶","s":"周二9-10节(每周)(待定)(1-16周)","d":1,"b":9,"e":10,"raw":["社交礼仪(6班) (职业技能类-职业技能类)","2","1-16","赵伟晶","周二9-10节(每周)(待定)(1-16周)","80"]},
+  {"n":"社交礼仪(7班) (职业技能类-职业技能类)","t":"赵伟晶","s":"周三1-2节(每周)(待定)(1-16周)","d":2,"b":1,"e":2,"raw":["社交礼仪(7班) (职业技能类-职业技能类)","2","1-16","赵伟晶","周三1-2节(每周)(待定)(1-16周)","80"]},
+  {"n":"社交礼仪(8班) (职业技能类-职业技能类)","t":"赵伟晶","s":"周四9-10节(每周)(待定)(1-16周)","d":3,"b":9,"e":10,"raw":["社交礼仪(8班) (职业技能类-职业技能类)","2","1-16","赵伟晶","周四9-10节(每周)(待定)(1-16周)","80"]},
+  {"n":"生成式人工智能与管理应用实战(1班) (职业技能类-职业技能类)","t":"杨书祥","s":"周四7-8节(每周)(待定)(1-16周)","d":3,"b":7,"e":8,"raw":["生成式人工智能与管理应用实战(1班) (职业技能类-职业技能类)","2","1-16","杨书祥","周四7-8节(每周)(待定)(1-16周)","60"]},
+  {"n":"生成式人工智能与管理应用实战(2班) (职业技能类-职业技能类)","t":"杨书祥","s":"周四9-10节(每周)(待定)(1-16周)","d":3,"b":9,"e":10,"raw":["生成式人工智能与管理应用实战(2班) (职业技能类-职业技能类)","2","1-16","杨书祥","周四9-10节(每周)(待定)(1-16周)","60"]},
+  {"n":"实用项目规划 (职业技能类-职业技能类)","t":"蔡少茹","s":"周二9-10节(每周)(待定)(1-8周)","d":1,"b":9,"e":10,"raw":["实用项目规划 (职业技能类-职业技能类)","2","1-16","蔡少茹","周二9-10节(每周)(待定)(1-8周)","60"]},
+  {"n":"手机微纪录(1班) (职业技能类-职业技能类)","t":"张睿煦","s":"周二7-8节(每周)(待定)(1-16周)","d":1,"b":7,"e":8,"raw":["手机微纪录(1班) (职业技能类-职业技能类)","2","1-16","张睿煦","周二7-8节(每周)(待定)(1-16周)","30"]},
+  {"n":"手机微纪录(2班) (职业技能类-职业技能类)","t":"张睿煦","s":"周二9-10节(每周)(待定)(1-16周)","d":1,"b":9,"e":10,"raw":["手机微纪录(2班) (职业技能类-职业技能类)","2","1-16","张睿煦","周二9-10节(每周)(待定)(1-16周)","30"]},
+  {"n":"手机微纪录(3班) (职业技能类-职业技能类)","t":"许由文","s":"周二9-10节(每周)(待定)(1-16周)","d":1,"b":9,"e":10,"raw":["手机微纪录(3班) (职业技能类-职业技能类)","2","1-16","许由文","周二9-10节(每周)(待定)(1-16周)","30"]},
+  {"n":"突发事件预防与应对技能 (职业技能类-职业技能类)","t":"杨波(法)","s":"周二9-10节(每周)(待定)(1-16周)","d":1,"b":9,"e":10,"raw":["突发事件预防与应对技能 (职业技能类-职业技能类)","2","1-16","杨波(法)","周二9-10节(每周)(待定)(1-16周)","80"]},
+  {"n":"乡村振兴调研方法与创意企划(1班) (职业技能类-职业技能类)","t":"曲志强","s":"周四7-8节(每周)(待定)(1-16周)","d":3,"b":7,"e":8,"raw":["乡村振兴调研方法与创意企划(1班) (职业技能类-职业技能类)","2","1-16","曲志强","周四7-8节(每周)(待定)(1-16周)","30"]},
+  {"n":"乡村振兴调研方法与创意企划(2班) (职业技能类-职业技能类)","t":"曲志强","s":"周四9-10节(每周)(待定)(1-16周)","d":3,"b":9,"e":10,"raw":["乡村振兴调研方法与创意企划(2班) (职业技能类-职业技能类)","2","1-16","曲志强","周四9-10节(每周)(待定)(1-16周)","30"]},
+  {"n":"职场适应与挫折应对(1班) (职业技能类-职业技能类)","t":"林海鹰","s":"周三9-10节(每周)(待定)(1-16周)","d":2,"b":9,"e":10,"raw":["职场适应与挫折应对(1班) (职业技能类-职业技能类)","2","1-16","林海鹰","周三9-10节(每周)(待定)(1-16周)","80"]},
+  {"n":"职场适应与挫折应对(2班) (职业技能类-职业技能类)","t":"林海鹰","s":"周四1-2节(每周)(待定)(1-16周)","d":3,"b":1,"e":2,"raw":["职场适应与挫折应对(2班) (职业技能类-职业技能类)","2","1-16","林海鹰","周四1-2节(每周)(待定)(1-16周)","80"]},
+  {"n":"职场适应与挫折应对(3班) (职业技能类-职业技能类)","t":"林海鹰","s":"周四7-8节(每周)(待定)(1-16周)","d":3,"b":7,"e":8,"raw":["职场适应与挫折应对(3班) (职业技能类-职业技能类)","2","1-16","林海鹰","周四7-8节(每周)(待定)(1-16周)","80"]},
+  {"n":"职场适应与挫折应对(4班) (职业技能类-职业技能类)","t":"林海鹰","s":"周四9-10节(每周)(待定)(1-16周)","d":3,"b":9,"e":10,"raw":["职场适应与挫折应对(4班) (职业技能类-职业技能类)","2","1-16","林海鹰","周四9-10节(每周)(待定)(1-16周)","80"]},
+  {"n":"职场适应与挫折应对(5班) (职业技能类-职业技能类)","t":"石舒雅","s":"周四3-4节(每周)(待定)(1-16周)","d":3,"b":3,"e":4,"raw":["职场适应与挫折应对(5班) (职业技能类-职业技能类)","2","1-16","石舒雅","周四3-4节(每周)(待定)(1-16周)","80"]},
+  {"n":"自我成长管理(1班) (职业技能类-职业技能类)","t":"戴伟娟","s":"周二7-8节(每周)(待定)(1-16周)","d":1,"b":7,"e":8,"raw":["自我成长管理(1班) (职业技能类-职业技能类)","2","1-16","戴伟娟","周二7-8节(每周)(待定)(1-16周)","80"]},
+  {"n":"自我成长管理(2班) (职业技能类-职业技能类)","t":"戴伟娟","s":"周四7-8节(每周)(待定)(1-16周)","d":3,"b":7,"e":8,"raw":["自我成长管理(2班) (职业技能类-职业技能类)","2","1-16","戴伟娟","周四7-8节(每周)(待定)(1-16周)","80"]}
+]
     },
-        // "创意与设计": {
-    //     "notice": "🎨 <b>创意提醒：</b>《平面设计》需要自带电脑上课，教室配置了专业手绘板。",
-    //     "courses": [
-    //         {"n":"平面设计基础(设计)","t":"陈老师","s":"周二3-6节","d":1,"b":3,"e":6},
-    //         {"n":"短视频创意(影像)","t":"刘老师","s":"周四7-8节","d":3,"b":7,"e":8}
-    //     ]
-    // }
+    "26-27 专业选修课": {
+        "notice": "<b>提醒：</b>该工具仅对选课进行梳理，方便校对自己课表，请根据自己实际需求，老师要求进行选择课程，选择课程后记得去学校教学系统确认要求，二次确认。",
+     "startTime": "2026-06-01 12:00",
+        "endTime": "2026-06-03 12:00",
+        "courses": [
+  {"n":"AIGC创意设计","t":"梁逸晟","s":"周四3-4节(每周)(主1#509)(1-16周)","d":3,"b":3,"e":4,"raw":["AIGC创意设计","2","1-16","梁逸晟","周四3-4节(每周)(主1#509)(1-16周)","25"]},
+  {"n":"AIGC影视美术","t":"张睿煦","s":"周一5-6节(每周)(主1#402)(1-16周)","d":0,"b":5,"e":6,"raw":["AIGC影视美术","2","1-16","张睿煦","周一5-6节(每周)(主1#402)(1-16周)","30"]},
+  {"n":"AI电商广告实务","t":"鞠然子","s":"周五3-4节(每周)(主1#407)(1-16周)","d":4,"b":3,"e":4,"raw":["AI电商广告实务","2","1-16","鞠然子","周五3-4节(每周)(主1#407)(1-16周)","30"]},
+  {"n":"AI视频广告制作与创意实战","t":"左斯文","s":"周四7-8节(每周)(主1#509)(1-16周)","d":3,"b":7,"e":8,"raw":["AI视频广告制作与创意实战","2","1-16","左斯文","周四7-8节(每周)(主1#509)(1-16周)","30"]},
+  {"n":"包装设计(文传)","t":"石廷金","s":"周一5-6节(每周)(主1#407)(1-16周)","d":0,"b":5,"e":6,"raw":["包装设计(文传)","2","1-16","石廷金","周一5-6节(每周)(主1#407)(1-16周)","30"]},
+  {"n":"程序化广告投放","t":"伍静","s":"周三9-10节(每周)(待定)(1-16周)","d":2,"b":9,"e":10,"raw":["程序化广告投放","2","1-16","伍静","周三9-10节(每周)(待定)(1-16周)","30"]},
+  {"n":"创客实验课Ⅰ","t":"李瞻良","s":"周一9-11节(每周)(主1#509)(1-16周)","d":0,"b":9,"e":11,"raw":["创客实验课Ⅰ","2","1-16","李瞻良","周一9-11节(每周)(主1#509)(1-16周)","30"]},
+  {"n":"创客实验课Ⅰ(2班)","t":"李瞻良","s":"周二9-11节(每周)(主1#509)(1-16周)","d":1,"b":9,"e":11,"raw":["创客实验课Ⅰ(2班)","2","1-16","李瞻良","周二9-11节(每周)(主1#509)(1-16周)","30"]},
+  {"n":"短视频文案写作","t":"林璐","s":"周一3-4节(每周)(待定)(1-16周)","d":0,"b":3,"e":4,"raw":["短视频文案写作","2","1-16","林璐","周一3-4节(每周)(待定)(1-16周)","30"]},
+  {"n":"公共关系学原理","t":"伍静","s":"周二5-6节(每周)(待定)(1-16周)","d":1,"b":5,"e":6,"raw":["公共关系学原理","2","1-16","伍静","周二5-6节(每周)(待定)(1-16周)","35"]},
+  {"n":"公益广告创作","t":"石廷金","s":"周四3-4节(每周)(主1#407)(1-16周)","d":3,"b":3,"e":4,"raw":["公益广告创作","2","1-16","石廷金","周四3-4节(每周)(主1#407)(1-16周)","30"]},
+  {"n":"广告法规与管理","t":"何竞平","s":"周一9-10节(每周)(待定)(1-16周)","d":0,"b":9,"e":10,"raw":["广告法规与管理","2","1-16","何竞平","周一9-10节(每周)(待定)(1-16周)","30"]},
+  {"n":"广告心理学(1班)","t":"徐杨","s":"周一5-6节(每周)(待定)(1-16周)","d":0,"b":5,"e":6,"raw":["广告心理学(1班)","2","1-16","徐杨","周一5-6节(每周)(待定)(1-16周)","35"]},
+  {"n":"广告心理学(2班)","t":"徐杨","s":"周四7-8节(每周)(待定)(1-16周)","d":3,"b":7,"e":8,"raw":["广告心理学(2班)","2","1-16","徐杨","周四7-8节(每周)(待定)(1-16周)","35"]},
+  {"n":"基础影视调色技术(1班)","t":"汤逢兴","s":"周二5-6节(单周)(主1#402)(1-15周)","d":1,"b":5,"e":6,"raw":["基础影视调色技术(1班)","1","1-16","汤逢兴","周二5-6节(单周)(主1#402)(1-15周)","18"]},
+  {"n":"基础影视调色技术(2班)","t":"汤逢兴","s":"周二5-6节(双周)(主1#402)(2-16周)","d":1,"b":5,"e":6,"raw":["基础影视调色技术(2班)","1","1-16","汤逢兴","周二5-6节(双周)(主1#402)(2-16周)","18"]},
+  {"n":"纪录片采访与拍摄(2班)","t":"陈丽丽","s":"周一7-8节(每周)(待定)(1-16周)","d":0,"b":7,"e":8,"raw":["纪录片采访与拍摄(2班)","2","1-16","陈丽丽","周一7-8节(每周)(待定)(1-16周)","40"]},
+  {"n":"纪录片选题策划与前期筹备(1班)","t":"陈丽丽","s":"周一9-10节(每周)(待定)(1-16周)","d":0,"b":9,"e":10,"raw":["纪录片选题策划与前期筹备(1班)","2","1-16","陈丽丽","周一9-10节(每周)(待定)(1-16周)","30"]},
+  {"n":"纪录片作品赏析(1班)","t":"陈丽丽","s":"周三3-4节(每周)(待定)(1-16周)","d":2,"b":3,"e":4,"raw":["纪录片作品赏析(1班)","2","1-16","陈丽丽","周三3-4节(每周)(待定)(1-16周)","40"]},
+  {"n":"纪录片作品赏析(2班)","t":"陈丽丽","s":"周二9-10节(每周)(待定)(1-16周)","d":1,"b":9,"e":10,"raw":["纪录片作品赏析(2班)","2","1-16","陈丽丽","周二9-10节(每周)(待定)(1-16周)","40"]},
+  {"n":"跨文化传播","t":"陈露","s":"周一3-4节(每周)(待定)(1-16周)","d":0,"b":3,"e":4,"raw":["跨文化传播","2","1-16","陈露","周一3-4节(每周)(待定)(1-16周)","40"]},
+  {"n":"媒介策略与计划","t":"何竞平","s":"周一5-6节(每周)(待定)(1-16周)","d":0,"b":5,"e":6,"raw":["媒介策略与计划","2","1-16","何竞平","周一5-6节(每周)(待定)(1-16周)","30"]},
+  {"n":"媒介关系与策略","t":"陈露","s":"周三3-4节(每周)(待定)(1-16周)","d":2,"b":3,"e":4,"raw":["媒介关系与策略","2","1-16","陈露","周三3-4节(每周)(待定)(1-16周)","40"]},
+  {"n":"美术基础(1班)","t":"李文国","s":"周三7-8节(每周)(主2#113)(1-16周)","d":2,"b":7,"e":8,"raw":["美术基础(1班)","2","1-16","李文国","周三7-8节(每周)(主2#113)(1-16周)","25"]},
+  {"n":"美术基础(2班)","t":"李文国","s":"周三9-10节(每周)(主2#113)(1-16周)","d":2,"b":9,"e":10,"raw":["美术基础(2班)","2","1-16","李文国","周三9-10节(每周)(主2#113)(1-16周)","25"]},
+  {"n":"美术基础(3班)","t":"李文国","s":"周一5-6节(每周)(主2#113)(1-16周)","d":0,"b":5,"e":6,"raw":["美术基础(3班)","2","1-16","李文国","周一5-6节(每周)(主2#113)(1-16周)","25"]},
+  {"n":"品牌形象设计(文传)","t":"石廷金","s":"周三3-4节(每周)(主1#407)(1-16周)","d":2,"b":3,"e":4,"raw":["品牌形象设计(文传)","2","1-16","石廷金","周三3-4节(每周)(主1#407)(1-16周)","30"]},
+  {"n":"平面设计应用技术(1班)","t":"张琪","s":"周一7-8节(每周)(主1#407)(1-16周)","d":0,"b":7,"e":8,"raw":["平面设计应用技术(1班)","2","1-16","张琪","周一7-8节(每周)(主1#407)(1-16周)","30"]},
+  {"n":"平面设计应用技术(2班)","t":"张琪","s":"周三7-8节(每周)(主1#407)(1-16周)","d":2,"b":7,"e":8,"raw":["平面设计应用技术(2班)","2","1-16","张琪","周三7-8节(每周)(主1#407)(1-16周)","30"]},
+  {"n":"人工智能生成广告(1班)","t":"李瞻良","s":"周二7-8节(每周)(主1#509)(1-16周)","d":1,"b":7,"e":8,"raw":["人工智能生成广告(1班)","2","1-16","李瞻良","周二7-8节(每周)(主1#509)(1-16周)","25"]},
+  {"n":"人工智能生成广告(2班)","t":"李瞻良","s":"周一5-6节(每周)(主1#509)(1-16周)","d":0,"b":5,"e":6,"raw":["人工智能生成广告(2班)","2","1-16","李瞻良","周一5-6节(每周)(主1#509)(1-16周)","25"]},
+  {"n":"色彩理论与高级调色技法","t":"左斯文","s":"周三7-8节(每周)(主1#402)(1-16周)","d":2,"b":7,"e":8,"raw":["色彩理论与高级调色技法","2","1-16","左斯文","周三7-8节(每周)(主1#402)(1-16周)","30"]},
+  {"n":"视觉设计基础(B)","t":"郭娟","s":"周二5-6节(每周)(主1#407)(1-16周)","d":1,"b":5,"e":6,"raw":["视觉设计基础(B)","2","1-16","郭娟","周二5-6节(每周)(主1#407)(1-16周)","30"]},
+  {"n":"视频特效制作","t":"左斯文","s":"周三3-4节(每周)(主1#402)(1-16周)","d":2,"b":3,"e":4,"raw":["视频特效制作","2","1-16","左斯文","周三3-4节(每周)(主1#402)(1-16周)","30"]},
+  {"n":"视听媒体语言(1班)","t":"张睿煦","s":"周一3-4节(每周)(主1#517（里间）)(1-16周)","d":0,"b":3,"e":4,"raw":["视听媒体语言(1班)","2","1-16","张睿煦","周一3-4节(每周)(主1#517（里间）)(1-16周)","30"]},
+  {"n":"视听媒体语言(2班)","t":"张睿煦","s":"周二1-2节(每周)(主1#517（里间）)(1-16周)","d":1,"b":1,"e":2,"raw":["视听媒体语言(2班)","2","1-16","张睿煦","周二1-2节(每周)(主1#517（里间）)(1-16周)","30"]},
+  {"n":"数字交互广告设计","t":"郭娟","s":"周二9-10节(每周)(主1#407)(1-16周)","d":1,"b":9,"e":10,"raw":["数字交互广告设计","2","1-16","郭娟","周二9-10节(每周)(主1#407)(1-16周)","30"]},
+  {"n":"戏剧影视文本创作(2班)","t":"郭晓清","s":"周二7-8节(每周)(待定)(1-16周)","d":1,"b":7,"e":8,"raw":["戏剧影视文本创作(2班)","2","1-16","郭晓清","周二7-8节(每周)(待定)(1-16周)","30"]},
+  {"n":"现代传播技术实验Ⅰ(硬件)(1班)","t":"廖跃儒","s":"周一3-4节(单周)(主1#517（外间）)(1-15周)","d":0,"b":3,"e":4,"raw":["现代传播技术实验Ⅰ(硬件)(1班)","1","1-16","廖跃儒","周一3-4节(单周)(主1#517（外间）)(1-15周)","18"]},
+  {"n":"现代传播技术实验Ⅰ(硬件)(2班)","t":"廖跃儒","s":"周一3-4节(双周)(主1#517（外间）)(2-16周)","d":0,"b":3,"e":4,"raw":["现代传播技术实验Ⅰ(硬件)(2班)","1","1-16","廖跃儒","周一3-4节(双周)(主1#517（外间）)(2-16周)","18"]},
+  {"n":"现代传播技术实验Ⅰ(硬件)(3班)","t":"廖跃儒","s":"周四3-4节(单周)(主1#517（外间）)(1-15周)","d":3,"b":3,"e":4,"raw":["现代传播技术实验Ⅰ(硬件)(3班)","1","1-16","廖跃儒","周四3-4节(单周)(主1#517（外间）)(1-15周)","18"]},
+  {"n":"现代传播技术实验Ⅰ(硬件)(4班)","t":"廖跃儒","s":"周四3-4节(双周)(主1#517（外间）)(2-16周)","d":3,"b":3,"e":4,"raw":["现代传播技术实验Ⅰ(硬件)(4班)","1","1-16","廖跃儒","周四3-4节(双周)(主1#517（外间）)(2-16周)","18"]},
+  {"n":"现代传播技术实验Ⅱ(软件)(1班)","t":"丁德江","s":"周四5-6节(单周)(主1#509)(1-15周)","d":3,"b":5,"e":6,"raw":["现代传播技术实验Ⅱ(软件)(1班)","1","1-16","丁德江","周四5-6节(单周)(主1#509)(1-15周)","18"]},
+  {"n":"现代传播技术实验Ⅱ(软件)(2班)","t":"丁德江","s":"周四5-6节(双周)(主1#509)(2-16周)","d":3,"b":5,"e":6,"raw":["现代传播技术实验Ⅱ(软件)(2班)","1","1-16","丁德江","周四5-6节(双周)(主1#509)(2-16周)","18"]},
+  {"n":"现代传播技术实验Ⅱ(软件)(3班)","t":"丁德江","s":"周五5-6节(单周)(主1#509)(1-15周)","d":4,"b":5,"e":6,"raw":["现代传播技术实验Ⅱ(软件)(3班)","1","1-16","丁德江","周五5-6节(单周)(主1#509)(1-15周)","18"]},
+  {"n":"现代传播技术实验Ⅱ(软件)(4班)","t":"丁德江","s":"周五5-6节(双周)(主1#509)(2-16周)","d":4,"b":5,"e":6,"raw":["现代传播技术实验Ⅱ(软件)(4班)","1","1-16","丁德江","周五5-6节(双周)(主1#509)(2-16周)","18"]},
+  {"n":"新媒体项目制作与运营","t":"陈露","s":"周三9-11节(每周)(主1#516)(1-16周)","d":2,"b":9,"e":11,"raw":["新媒体项目制作与运营","2","1-16","陈露","周三9-11节(每周)(主1#516)(1-16周)","25"]},
+  {"n":"新闻心理学","t":"黄晓丽","s":"周一9-10节(每周)(待定)(1-16周)","d":0,"b":9,"e":10,"raw":["新闻心理学","2","1-16","黄晓丽","周一9-10节(每周)(待定)(1-16周)","40"]},
+  {"n":"演播室节目制作","t":"罗炜","s":"周一3-4节(每周)(主1#516)(1-16周)","d":0,"b":3,"e":4,"raw":["演播室节目制作","2","1-16","罗炜","周一3-4节(每周)(主1#516)(1-16周)","25"]},
+  {"n":"影视灯光与影调","t":"左斯文","s":"周四3-4节(每周)(主1#414)(1-16周)","d":3,"b":3,"e":4,"raw":["影视灯光与影调","2","1-16","左斯文","周四3-4节(每周)(主1#414)(1-16周)","30"]},
+  {"n":"政府公关(1班)","t":"伍静","s":"周三3-4节(每周)(待定)(1-16周)","d":2,"b":3,"e":4,"raw":["政府公关(1班)","2","1-16","伍静","周三3-4节(每周)(待定)(1-16周)","35"]},
+  {"n":"政府公关(2班)","t":"伍静","s":"周三7-8节(每周)(待定)(1-16周)","d":2,"b":7,"e":8,"raw":["政府公关(2班)","2","1-16","伍静","周三7-8节(每周)(待定)(1-16周)","35"]},
+  {"n":"智能三维设计","t":"鞠然子","s":"周四9-10节(每周)(主1#407)(1-16周)","d":3,"b":9,"e":10,"raw":["智能三维设计","2","1-16","鞠然子","周四9-10节(每周)(主1#407)(1-16周)","40"]}
+]
+    }
+    ,
+    "26-27 创新创业平台选修课": {
+        "notice": "<b>提醒：</b>非必须修读/有意者可选/认技选",
+     "startTime": "2026-06-01 12:00",
+        "endTime": "2026-06-03 12:00",
+        "courses": [
+  {"n":"TRIZ创新理论与实践 (职业技能类-职业技能类)","t":"江思华","s":"周五1-2节(每周)(待定)(1-16周)","d":4,"b":1,"e":2,"raw":["TRIZ创新理论与实践 (职业技能类-职业技能类)","2","1-16","江思华","周五1-2节(每周)(待定)(1-16周)","40"]},
+  {"n":"创新创业案例研究(1班) (职业技能类-职业技能类)","t":"林雪治","s":"周三7-8节(每周)(待定)(1-16周)","d":2,"b":7,"e":8,"raw":["创新创业案例研究(1班) (职业技能类-职业技能类)","2","1-16","林雪治","周三7-8节(每周)(待定)(1-16周)","40"]},
+  {"n":"创新创业案例研究(2班) (职业技能类-职业技能类)","t":"王淑云","s":"周五3-4节(每周)(待定)(1-16周)","d":4,"b":3,"e":4,"raw":["创新创业案例研究(2班) (职业技能类-职业技能类)","2","1-16","王淑云","周五3-4节(每周)(待定)(1-16周)","40"]},
+  {"n":"创新创业法律基础(1班) (职业技能类-职业技能类)","t":"苏考辉","s":"周四3-4节(每周)(待定)(1-16周)","d":3,"b":3,"e":4,"raw":["创新创业法律基础(1班) (职业技能类-职业技能类)","2","1-16","苏考辉","周四3-4节(每周)(待定)(1-16周)","40"]},
+  {"n":"创新创业法律基础(2班) (职业技能类-职业技能类)","t":"林雪治","s":"周二3-4节(每周)(待定)(1-16周)","d":1,"b":3,"e":4,"raw":["创新创业法律基础(2班) (职业技能类-职业技能类)","2","1-16","林雪治","周二3-4节(每周)(待定)(1-16周)","40"]},
+  {"n":"创新管理与新产品开发 (职业技能类-职业技能类)","t":"郭娟","s":"周四7-8节(每周)(待定)(1-16周)","d":3,"b":7,"e":8,"raw":["创新管理与新产品开发 (职业技能类-职业技能类)","2","1-16","郭娟","周四7-8节(每周)(待定)(1-16周)","40"]},
+  {"n":"创业投资与资本市场(1班) (职业技能类-职业技能类)","t":"苏考辉","s":"周一5-6节(每周)(待定)(1-16周)","d":0,"b":5,"e":6,"raw":["创业投资与资本市场(1班) (职业技能类-职业技能类)","2","1-16","苏考辉","周一5-6节(每周)(待定)(1-16周)","40"]},
+  {"n":"创业投资与资本市场(2班) (职业技能类-职业技能类)","t":"魏英辉","s":"周二1-2节(每周)(待定)(1-16周)","d":1,"b":1,"e":2,"raw":["创业投资与资本市场(2班) (职业技能类-职业技能类)","2","1-16","魏英辉","周二1-2节(每周)(待定)(1-16周)","40"]},
+  {"n":"创业组织与领导 (职业技能类-职业技能类)","t":"江思华","s":"周二5-6节(每周)(待定)(1-16周)","d":1,"b":5,"e":6,"raw":["创业组织与领导 (职业技能类-职业技能类)","2","1-16","江思华","周二5-6节(每周)(待定)(1-16周)","40"]},
+  {"n":"国际创新创业合作 (职业技能类-职业技能类)","t":"王仲辉","s":"周四5-6节(每周)(待定)(1-16周)","d":3,"b":5,"e":6,"raw":["国际创新创业合作 (职业技能类-职业技能类)","2","1-16","王仲辉","周四5-6节(每周)(待定)(1-16周)","60"]},
+  {"n":"积极心理学 (职业技能类-职业技能类)","t":"李海艳","s":"周三3-4节(每周)(待定)(1-16周)","d":2,"b":3,"e":4,"raw":["积极心理学 (职业技能类-职业技能类)","2","1-16","李海艳","周三3-4节(每周)(待定)(1-16周)","60"]},
+  {"n":"商业模式创新 (职业技能类-职业技能类)","t":"杨聪斌","s":"周一3-4节(每周)(待定)(1-16周)","d":0,"b":3,"e":4,"raw":["商业模式创新 (职业技能类-职业技能类)","2","1-16","杨聪斌","周一3-4节(每周)(待定)(1-16周)","40"]},
+  {"n":"双创“四力”实战技能 (职业技能类-职业技能类)","t":"卢凌","s":"周四1-2节(每周)(待定)(1-16周)","d":3,"b":1,"e":2,"raw":["双创“四力”实战技能 (职业技能类-职业技能类)","2","1-16","卢凌","周四1-2节(每周)(待定)(1-16周)","40"]},
+  {"n":"特色产业创新与创业研究专题(1班) (职业技能类-职业技能类)","t":"杨聪斌","s":"周五5-6节(每周)(待定)(1-16周)","d":4,"b":5,"e":6,"raw":["特色产业创新与创业研究专题(1班) (职业技能类-职业技能类)","2","1-16","杨聪斌","周五5-6节(每周)(待定)(1-16周)","60"]},
+  {"n":"特色产业创新与创业研究专题(2班) (职业技能类-职业技能类)","t":"段景伦","s":"周四5-6节(每周)(待定)(1-16周)","d":3,"b":5,"e":6,"raw":["特色产业创新与创业研究专题(2班) (职业技能类-职业技能类)","2","1-16","段景伦","周四5-6节(每周)(待定)(1-16周)","60"]},
+  {"n":"特色产业创新与创业研究专题(3班) (职业技能类-职业技能类)","t":"王仲辉","s":"周四3-4节(每周)(待定)(1-16周)","d":3,"b":3,"e":4,"raw":["特色产业创新与创业研究专题(3班) (职业技能类-职业技能类)","2","1-16","王仲辉","周四3-4节(每周)(待定)(1-16周)","60"]},
+  {"n":"新创企业营销(1班) (职业技能类-职业技能类)","t":"王淑云","s":"周五5-6节(每周)(待定)(1-16周)","d":4,"b":5,"e":6,"raw":["新创企业营销(1班) (职业技能类-职业技能类)","2","1-16","王淑云","周五5-6节(每周)(待定)(1-16周)","40"]},
+  {"n":"新创企业营销(2班) (职业技能类-职业技能类)","t":"王伟骏","s":"周一9-10节(每周)(待定)(1-16周)","d":0,"b":9,"e":10,"raw":["新创企业营销(2班) (职业技能类-职业技能类)","2","1-16","王伟骏","周一9-10节(每周)(待定)(1-16周)","40"]},
+  {"n":"新创企业营销(3班) (职业技能类-职业技能类)","t":"王伟骏","s":"周五3-4节(每周)(待定)(1-16周)","d":4,"b":3,"e":4,"raw":["新创企业营销(3班) (职业技能类-职业技能类)","2","1-16","王伟骏","周五3-4节(每周)(待定)(1-16周)","40"]},
+  {"n":"自控力科学 (职业技能类-职业技能类)","t":"李海艳","s":"周三7-8节(每周)(待定)(1-16周)","d":2,"b":7,"e":8,"raw":["自控力科学 (职业技能类-职业技能类)","2","1-16","李海艳","周三7-8节(每周)(待定)(1-16周)","60"]}
+]
+    }
+
+    // 如果你以后要添加新的课程组，可以这样写：
+    /*
+    ,
+    "创意与设计": {
+        "notice": "🎨 <b>创意提醒：</b>《平面设计》需要自带电脑上课，教室配置了专业手绘板。",
+        "startTime": "2026-06-05 08:00",
+        "endTime": "2026-06-07 18:00",
+        "courses": [
+            {"n":"平面设计基础(设计)","t":"陈老师","s":"周二3-6节","d":1,"b":3,"e":6},
+            {"n":"短视频创意(影像)","t":"刘老师","s":"周四7-8节","d":3,"b":7,"e":8}
+        ]
+    }
+    */
 };
 
-
 const DAYS = ['周一', '周二', '周三', '周四', '周五'];
-// 定义时段对应的节次范围: 0=上午(1-4), 1=下午(5-8), 2=晚上(9-12)
+
 const PERIODS = [
     { name: '上午', range: [1, 4] },
     { name: '下午', range: [5, 8] },
@@ -349,92 +832,236 @@ const PERIODS = [
 let currentPool = [];    
 let currentSubTag = '全部'; 
 let currentKeyword = '';
-
-// 核心数据结构：排除矩阵 state[dayIndex][periodIndex] = boolean
-// 例如 excludedMatrix[0][0] = true 代表排除周一上午
 let excludedMatrix = Array(5).fill(null).map(() => [false, false, false]);
+
+// 当前选中的课程组名称
+let currentGroupName = '';
+
+// 倒计时定时器
+let countdownTimer = null;
 
 function init() {
     renderMatrixControl();
     renderGrid();
     
     const menu = document.getElementById('menu');
+
     Object.keys(DATA_STORE).forEach((key, index) => {
         const item = document.createElement('div');
-        item.className = 'db-item' + (index===0?' active':'');
+        item.className = 'db-item' + (index === 0 ? ' active' : '');
         item.innerText = key;
+
         item.onclick = () => {
             document.querySelectorAll('.db-item').forEach(i => i.classList.remove('active'));
             item.classList.add('active');
             switchGroup(key);
         };
+
         menu.appendChild(item);
-        if(index === 0) switchGroup(key);
+
+        if (index === 0) {
+            switchGroup(key);
+        }
     });
 
-    if(window.innerWidth <= 1024) {
+    if (window.innerWidth <= 1024) {
         document.getElementById('mobile-hint').style.display = 'inline';
     }
 }
 
-// 1. 渲染排除矩阵控制面板
+// ================== 新增：时间解析函数 ==================
+// 把 "2026-06-01 12:00" 转成 Date 对象
+function parseDateTime(str) {
+    if (!str) return null;
+
+    // 兼容 Safari，避免 Safari 无法稳定识别 "2026-06-01 12:00"
+    return new Date(str.replace(/-/g, '/'));
+}
+
+// ================== 新增：补零函数 ==================
+function padZero(num) {
+    return String(num).padStart(2, '0');
+}
+
+// ================== 新增：格式化剩余时间 ==================
+function formatDuration(ms) {
+    if (ms <= 0) return '00天 00小时 00分 00秒';
+
+    const totalSeconds = Math.floor(ms / 1000);
+    const days = Math.floor(totalSeconds / 86400);
+    const hours = Math.floor((totalSeconds % 86400) / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    return `${padZero(days)}天 ${padZero(hours)}小时 ${padZero(minutes)}分 ${padZero(seconds)}秒`;
+}
+
+// ================== 新增：格式化显示时间 ==================
+function formatDateLabel(str) {
+    if (!str) return '未设置';
+    return str;
+}
+
+// ================== 新增：更新选课倒计时 ==================
+function updateCountdown() {
+    const panel = document.getElementById('countdownPanel');
+    const title = document.getElementById('countdownTitle');
+    const time = document.getElementById('countdownTime');
+    const meta = document.getElementById('countdownMeta');
+    const bar = document.getElementById('progressBar');
+
+    const group = DATA_STORE[currentGroupName];
+
+    if (!group) {
+        title.innerText = '⏳ 选课时间';
+        time.innerText = '暂无课程组';
+        meta.innerText = '';
+        bar.style.width = '0%';
+        return;
+    }
+
+    const start = parseDateTime(group.startTime);
+    const end = parseDateTime(group.endTime);
+    const now = new Date();
+
+    panel.classList.remove('waiting', 'running', 'ended');
+
+    if (!start || !end || isNaN(start.getTime()) || isNaN(end.getTime())) {
+        panel.classList.add('ended');
+        title.innerText = '⏳ 选课时间未设置';
+        time.innerText = '请在 DATA_STORE 中设置 startTime 和 endTime';
+        meta.innerText = '';
+        bar.style.width = '0%';
+        return;
+    }
+
+    if (end <= start) {
+        panel.classList.add('ended');
+        title.innerText = '⚠️ 选课时间设置错误';
+        time.innerText = '结束时间必须晚于开始时间';
+        meta.innerText = `开始：${formatDateLabel(group.startTime)}　结束：${formatDateLabel(group.endTime)}`;
+        bar.style.width = '0%';
+        return;
+    }
+
+    meta.innerText = `开始：${formatDateLabel(group.startTime)}　结束：${formatDateLabel(group.endTime)}`;
+
+    // 还没到开始时间
+    if (now < start) {
+        const remainToStart = start - now;
+
+        panel.classList.add('waiting');
+        title.innerText = '⏳ 距离选课开始还有';
+        time.innerText = formatDuration(remainToStart);
+
+        // 未开始时，进度条不显示进度
+        bar.style.width = '0%';
+        bar.style.background = 'linear-gradient(90deg, #f59e0b, #f97316)';
+
+        return;
+    }
+
+    // 已经结束
+    if (now >= end) {
+        panel.classList.add('ended');
+        title.innerText = '✅ 选课已结束';
+        time.innerText = '00天 00小时 00分 00秒';
+
+        bar.style.width = '0%';
+        bar.style.background = '#94a3b8';
+
+        return;
+    }
+
+    // 正在选课中
+    const total = end - start;
+    const remain = end - now;
+
+    // 剩余比例：刚开始接近 100%，快结束接近 0%
+    const remainPercent = Math.max(0, Math.min(100, remain / total * 100));
+
+    panel.classList.add('running');
+    title.innerText = '🔥 距离选课结束还有';
+    time.innerText = formatDuration(remain);
+
+    bar.style.width = remainPercent + '%';
+
+    // 根据剩余时间变色
+    if (remainPercent > 60) {
+        bar.style.background = 'linear-gradient(90deg, #22c55e, #3b82f6)';
+    } else if (remainPercent > 30) {
+        bar.style.background = 'linear-gradient(90deg, #f59e0b, #f97316)';
+    } else {
+        bar.style.background = 'linear-gradient(90deg, #f43f5e, #e11d48)';
+    }
+}
+
+// ================== 新增：启动倒计时 ==================
+function startCountdown() {
+    if (countdownTimer) {
+        clearInterval(countdownTimer);
+    }
+
+    updateCountdown();
+
+    countdownTimer = setInterval(() => {
+        updateCountdown();
+    }, 1000);
+}
+
+// 渲染矩阵控制
 function renderMatrixControl() {
     const container = document.getElementById('matrixContainer');
-    let html = '<div class="mx-cell" style="border:none; background:none;"></div>'; // 左上角空白
+    let html = '<div class="mx-cell" style="border:none; background:none;"></div>'; 
     
-    // 表头：周一到周五 (点击可整列排除)
     DAYS.forEach((d, dayIdx) => {
         const isColFull = excludedMatrix[dayIdx].every(v => v === true);
-        const activeClass = isColFull ? 'excluded' : '';
-        html += `<div class="mx-cell mx-head-col ${activeClass}" onclick="toggleColumn(${dayIdx})">${d}</div>`;
+        html += `<div class="mx-cell mx-head-col ${isColFull ? 'excluded' : ''}" onclick="toggleColumn(${dayIdx})">${d}</div>`;
     });
 
-    // 表内容：三行 (上午/下午/晚上)
     PERIODS.forEach((p, pIdx) => {
-        // 行头 (点击可整行排除)
-        // 检查该行是否全被排除
         let isRowFull = true;
-        for(let d=0; d<5; d++) { if(!excludedMatrix[d][pIdx]) isRowFull = false; }
+
+        for (let d = 0; d < 5; d++) { 
+            if (!excludedMatrix[d][pIdx]) isRowFull = false; 
+        }
         
-        html += `<div class="mx-cell mx-head-row ${isRowFull?'excluded':''}" onclick="toggleRow(${pIdx})">${p.name}</div>`;
-        
-        // 具体的格子
-        for(let d=0; d<5; d++) {
+        html += `<div class="mx-cell mx-head-row ${isRowFull ? 'excluded' : ''}" onclick="toggleRow(${pIdx})">${p.name}</div>`;
+
+        for (let d = 0; d < 5; d++) {
             const isExcluded = excludedMatrix[d][pIdx];
-            // 显示简写，如 "一上", "二下" 或者 简单的方块符号
-            // 为了美观，未排除显示空，排除显示 "屏蔽" 或 图标
-            const content = isExcluded ? '🚫' : '';
-            html += `<div class="mx-cell ${isExcluded ? 'excluded' : ''}" onclick="toggleMatrixCell(${d}, ${pIdx})">${content}</div>`;
+            html += `<div class="mx-cell ${isExcluded ? 'excluded' : ''}" onclick="toggleMatrixCell(${d}, ${pIdx})">${isExcluded ? '🚫' : ''}</div>`;
         }
     });
 
     container.innerHTML = html;
 }
 
-// 切换单个格子
+// 矩阵逻辑函数
 function toggleMatrixCell(d, pIdx) {
     excludedMatrix[d][pIdx] = !excludedMatrix[d][pIdx];
     renderMatrixControl();
     handleSearch();
 }
 
-// 切换整列 (周几)
 function toggleColumn(d) {
-    // 如果当前全选，则全反选；否则全选
     const allSelected = excludedMatrix[d].every(v => v === true);
     excludedMatrix[d] = excludedMatrix[d].map(() => !allSelected);
     renderMatrixControl();
     handleSearch();
 }
 
-// 切换整行 (上午/下午/晚上)
 function toggleRow(pIdx) {
     let allSelected = true;
-    for(let d=0; d<5; d++) { if(!excludedMatrix[d][pIdx]) allSelected = false; }
-    
-    for(let d=0; d<5; d++) {
-        excludedMatrix[d][pIdx] = !allSelected;
+
+    for (let d = 0; d < 5; d++) { 
+        if (!excludedMatrix[d][pIdx]) allSelected = false; 
     }
+
+    for (let d = 0; d < 5; d++) { 
+        excludedMatrix[d][pIdx] = !allSelected; 
+    }
+
     renderMatrixControl();
     handleSearch();
 }
@@ -445,14 +1072,17 @@ function resetExclusion() {
     handleSearch();
 }
 
-// 判断某个具体的课程大节 (1-2, 3-4...) 是否被排除
-// p = 开始节次 (1, 3, 5...)
 function isSlotExcluded(dayIdx, p) {
     let pIdx = -1;
-    if (p <= 4) pIdx = 0;      // 上午
-    else if (p <= 8) pIdx = 1; // 下午
-    else pIdx = 2;             // 晚上
-    
+
+    if (p <= 4) {
+        pIdx = 0;
+    } else if (p <= 8) {
+        pIdx = 1;
+    } else {
+        pIdx = 2;
+    }
+
     return excludedMatrix[dayIdx][pIdx];
 }
 
@@ -460,39 +1090,60 @@ function isSlotExcluded(dayIdx, p) {
 function renderGrid() {
     const grid = document.getElementById('grid');
     grid.innerHTML = '<div class="cell head"></div>' + DAYS.map(d => `<div class="cell head">${d}</div>`).join('');
-    
+
     for (let p = 1; p <= 11; p += 2) {
-        grid.innerHTML += `<div class="cell head">${p}-${p+1}</div>`;
+        grid.innerHTML += `<div class="cell head">${p}-${p + 1}</div>`;
+
         for (let d = 0; d < 5; d++) {
             grid.innerHTML += `<div class="cell" id="cell-${d}-${p}" onclick="showSlotDetail(${d},${p})"></div>`;
         }
     }
 }
 
+// 切换课程组
 function switchGroup(groupName) {
+    currentGroupName = groupName;
+
     const group = DATA_STORE[groupName];
     currentPool = group.courses || [];
     currentSubTag = '全部';
-    document.getElementById('banner').innerHTML = group.notice || "暂无当前课程组公告信息。";
+
+    document.getElementById('banner').innerHTML = group.notice || "暂无公告";
+
+    // 切换课程组时，启动对应课程组的倒计时
+    startCountdown();
 
     const subTags = new Set(['全部']);
+    
+    // 遍历课程，使用正则自动提取标签
     currentPool.forEach(c => {
-        if (c.subCategory) subTags.add(c.subCategory);
-        else subTags.add("其他");
+        const matches = c.n.match(/\(([^)]+)\)$/);
+        
+        if (matches && matches[1]) {
+            c.subCategory = matches[1].trim();
+        } else {
+            c.subCategory = "其他";
+        }
+
+        subTags.add(c.subCategory);
     });
 
     const container = document.getElementById('filterChips');
     container.innerHTML = '';
+    
+    // 渲染自动生成的标签
     Array.from(subTags).forEach(tag => {
         const chip = document.createElement('div');
         chip.className = `tag-chip ${tag === '全部' ? 'active' : ''}`;
         chip.innerText = tag;
+
         chip.onclick = () => {
             document.querySelectorAll('.tag-chip').forEach(tc => tc.classList.remove('active'));
             chip.classList.add('active');
             currentSubTag = tag;
             handleSearch();
         };
+
         container.appendChild(chip);
     });
 
@@ -503,8 +1154,10 @@ function switchGroup(groupName) {
 function getHeatColor(count, isSearch) {
     if (count === 0) return '#f8fafc';
     if (isSearch) return '#fff7ed'; 
+
     const step = Math.min(count, 10); 
     const lightness = 95 - (step * 6); 
+
     return `hsl(217, 91%, ${lightness}%)`;
 }
 
@@ -512,46 +1165,50 @@ function handleSearch() {
     currentKeyword = document.getElementById('locateSearch').value.trim().toLowerCase();
     const inputEl = document.getElementById('locateSearch');
     
-    // 1. 筛选课程 (关键词 + 标签 + 矩阵排除逻辑)
     const filteredList = currentPool.filter(c => {
-        // 核心排除检查
-        // 判断课程开始时间落在哪个时段
+        // 排除逻辑
         let pIdx = -1;
-        if (c.b <= 4) pIdx = 0;
-        else if (c.b <= 8) pIdx = 1;
-        else pIdx = 2;
 
-        // 如果该天的该时段被exclude，则过滤掉
+        if (c.b <= 4) {
+            pIdx = 0;
+        } else if (c.b <= 8) {
+            pIdx = 1;
+        } else {
+            pIdx = 2;
+        }
+
         if (excludedMatrix[c.d][pIdx]) return false;
 
+        // 标签与搜索逻辑
         const matchTag = currentSubTag === '全部' || c.subCategory === currentSubTag;
-        const matchKey = !currentKeyword || c.n.toLowerCase().includes(currentKeyword) || (c.t && c.t.toLowerCase().includes(currentKeyword));
+        const matchKey = !currentKeyword || 
+            c.n.toLowerCase().includes(currentKeyword) || 
+            (c.t && c.t.toLowerCase().includes(currentKeyword));
+
         return matchTag && matchKey;
     });
 
-    // 2. 重置样式
+    // 重置与渲染格子
     document.querySelectorAll('.cell:not(.head)').forEach(el => {
-        el.className = 'cell';
-        el.style.backgroundColor = '';
-        el.style.color = '';
-        el.style.backgroundImage = '';
+        el.className = 'cell'; 
+        el.style = ''; 
         el.innerHTML = '';
-        el.style.pointerEvents = 'auto';
-        el.style.opacity = '1';
     });
 
-    // 3. 应用排除样式到格子 (灰色斜纹)
     for (let p = 1; p <= 11; p += 2) {
         for (let d = 0; d < 5; d++) {
             if (isSlotExcluded(d, p)) {
                 const el = document.getElementById(`cell-${d}-${p}`);
-                if(el) el.classList.add('excluded-slot');
+
+                if (el) {
+                    el.classList.add('excluded-slot');
+                }
             }
         }
     }
 
-    // 4. 填充热力数据
     const counts = {};
+
     filteredList.forEach(c => {
         const bigSlot = c.b % 2 === 0 ? c.b - 1 : c.b; 
         const key = `${c.d}-${bigSlot}`;
@@ -560,11 +1217,15 @@ function handleSearch() {
 
     Object.keys(counts).forEach(k => {
         const el = document.getElementById(`cell-${k}`);
-        // 仅当未被排除时显示
-        if(el && !el.classList.contains('excluded-slot')) {
+
+        if (el && !el.classList.contains('excluded-slot')) {
             const n = counts[k];
-            el.innerHTML = `<span style="font-size:16px; font-weight:800">${n}</span><span style="font-size:9px; opacity:0.8">门</span>`;
-            
+
+            el.innerHTML = `
+                <span style="font-size:16px; font-weight:800">${n}</span>
+                <span style="font-size:9px; opacity:0.8">门</span>
+            `;
+
             if (currentKeyword) {
                 el.classList.add('search-match');
                 inputEl.classList.add('searching');
@@ -583,22 +1244,35 @@ function showSlotDetail(d, p) {
     if (isSlotExcluded(d, p)) return;
 
     document.querySelectorAll('.cell').forEach(el => el.classList.remove('active-slot'));
-    const target = document.getElementById(`cell-${d}-${p}`);
-    if(target) target.classList.add('active-slot');
 
-    document.getElementById('slotInfo').innerText = `${DAYS[d]} 第${p}-${p+1}节 选中详情`;
+    const target = document.getElementById(`cell-${d}-${p}`);
+
+    if (target) {
+        target.classList.add('active-slot');
+    }
+
+    document.getElementById('slotInfo').innerText = `${DAYS[d]} 第${p}-${p + 1}节 选中详情`;
     
     const slotList = currentPool.filter(c => {
-        // 同样的排除逻辑检查，确保列表与网格一致
         let pIdx = -1;
-        if (c.b <= 4) pIdx = 0;
-        else if (c.b <= 8) pIdx = 1;
-        else pIdx = 2;
+
+        if (c.b <= 4) {
+            pIdx = 0;
+        } else if (c.b <= 8) {
+            pIdx = 1;
+        } else {
+            pIdx = 2;
+        }
+
         if (excludedMatrix[c.d][pIdx]) return false;
 
         const matchTag = currentSubTag === '全部' || c.subCategory === currentSubTag;
-        const matchKey = !currentKeyword || c.n.toLowerCase().includes(currentKeyword) || (c.t && c.t.toLowerCase().includes(currentKeyword));
-        const hasOverlap = (c.b <= p+1 && c.e >= p);
+        const matchKey = !currentKeyword || 
+            c.n.toLowerCase().includes(currentKeyword) || 
+            (c.t && c.t.toLowerCase().includes(currentKeyword));
+
+        const hasOverlap = c.b <= p + 1 && c.e >= p;
+
         return matchTag && matchKey && c.d === d && hasOverlap;
     });
     
@@ -624,22 +1298,26 @@ function renderList(list, isManual = false) {
     titleEl.innerText = isManual ? "📍 选中节次课程" : `🔍 筛选结果 (${list.length})`;
     container.innerHTML = '';
 
-    if(!list || list.length === 0) {
-        container.innerHTML = '<div style="color:#f43f5e; text-align:center; margin-top:50px; font-size:12px;">该时段暂无匹配课程（或已被排除）</div>';
+    if (!list || list.length === 0) {
+        container.innerHTML = '<div style="color:#f43f5e; text-align:center; margin-top:50px; font-size:12px;">该时段暂无匹配课程</div>';
         return;
     }
 
     list.forEach(c => {
         const card = document.createElement('div');
         card.className = 'course-card';
+
         card.innerHTML = `
             <div class="card-head">${c.n}</div>
             <div class="card-body">
                 <div>👤 教师：${c.t || '未知'}</div>
                 <div>⏰ 时间：${c.s || '见系统'}</div>
-                <div style="margin-top:4px; font-size:10px; color:#94a3b8; border:1px solid #e2e8f0; display:inline-block; padding:0 4px; border-radius:4px;">${c.subCategory || '通识'}</div>
+                <div style="margin-top:4px; font-size:10px; color:#94a3b8; border:1px solid #e2e8f0; display:inline-block; padding:0 4px; border-radius:4px;">
+                    ${c.subCategory || '其他'}
+                </div>
             </div>
         `;
+
         container.appendChild(card);
     });
 }
