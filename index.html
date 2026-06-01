@@ -1222,7 +1222,7 @@ const DATA_STORE = {
 ]
     }
     ,
-    "26-27 创新创业平台选修课": {
+    "(非必须)26-27 创新创业平台": {
         "notice": "<b>提醒：</b>非必须修读/有意者可选/认技选",
      "startTime": "2026-06-01 12:00",
         "endTime": "2026-06-03 12:00",
@@ -1682,22 +1682,40 @@ function getTotalRequiredCredits() {
 function updateCart() {
     const countEl = document.getElementById('cartCount');
     const body = document.getElementById('cartBody');
+    const headerSub = document.getElementById('cartHeaderSub');
 
     const totalCourses = getTotalSelectedCourses();
     const totalCredits = getTotalSelectedCredits();
     const totalRequired = getTotalRequiredCredits();
 
+    const totalPercent = totalRequired > 0 
+        ? Math.min(100, totalCredits / totalRequired * 100) 
+        : 0;
+
     countEl.innerText = totalCourses;
+
+    if (headerSub) {
+        headerSub.innerText = `${totalCredits}/${totalRequired} 学分，${totalCourses} 门`;
+    }
 
     let html = `
         <div class="cart-summary">
-            已选课程：<b>${totalCourses}</b> 门<br>
-            已选学分：<b>${totalCredits}</b> / ${totalRequired} 学分
+            <div class="cart-summary-row">
+                <span>总进度</span>
+                <span><strong>${totalCredits}</strong> / ${totalRequired} 学分</span>
+            </div>
+            <div class="cart-summary-row">
+                <span>已选课程</span>
+                <span><strong>${totalCourses}</strong> 门</span>
+            </div>
+            <div class="cart-progress-track">
+                <div class="cart-progress-bar" style="width:${totalPercent}%;"></div>
+            </div>
         </div>
     `;
 
     if (totalCourses === 0) {
-        html += `<div class="empty-cart">还没有选择课程</div>`;
+        html += `<div class="empty-cart">还没有选择课程<br>点击右侧课程卡片加入</div>`;
         body.innerHTML = html;
         return;
     }
@@ -1706,28 +1724,57 @@ function updateCart() {
         const list = selectedMap[groupName] || [];
         const required = getRequiredCredits(groupName);
         const credits = getSelectedCredits(groupName);
+        const remain = Math.max(0, required - credits);
+        const percent = required > 0 ? Math.min(100, credits / required * 100) : 0;
+        const done = required > 0 && credits >= required;
 
         html += `
-            <div class="cart-group">
+            <div class="cart-group ${done ? 'done' : ''}">
                 <div class="cart-group-title">
-                    <span>${groupName}</span>
-                    <span>${credits}/${required}</span>
+                    <span class="cart-group-name">${groupName}</span>
+                    <span class="cart-group-credit">${credits}/${required}</span>
+                </div>
+                <div class="cart-group-progress">
+                    <div class="cart-group-progress-bar" style="width:${percent}%;"></div>
                 </div>
         `;
 
         if (list.length === 0) {
-            html += `<div class="cart-course" style="color:#94a3b8;">暂未选择</div>`;
+            html += `
+                <div class="cart-course" style="color:#94a3b8;">
+                    暂未选择，需 ${required} 学分
+                </div>
+            `;
         } else {
             list.forEach(c => {
                 html += `
                     <div class="cart-course">
                         <div class="cart-course-name">${c.n}</div>
-                        <div>👤 ${c.t || '未知'}　⏰ ${c.s || '见系统'}</div>
-                        <div>学分：${getCourseCredit(c)}</div>
-                        <span class="cart-remove" onclick="removeCourse('${groupName}', '${c._id}')">移除</span>
+                        <div class="cart-course-meta">
+                            👤 ${c.t || '未知'}<br>
+                            ⏰ ${c.s || '见系统'}
+                        </div>
+                        <div class="cart-course-footer">
+                            <span class="cart-credit-badge">${getCourseCredit(c)} 学分</span>
+                            <span class="cart-remove" onclick="removeCourse('${groupName}', '${c._id}')">移除</span>
+                        </div>
                     </div>
                 `;
             });
+        }
+
+        if (!done) {
+            html += `
+                <div style="font-size:11px;color:#64748b;padding:0 10px 10px;">
+                    还差 ${remain} 学分
+                </div>
+            `;
+        } else {
+            html += `
+                <div style="font-size:11px;color:#16a34a;padding:0 10px 10px;font-weight:800;">
+                    ✅ 已满足该组要求
+                </div>
+            `;
         }
 
         html += `</div>`;
@@ -1962,7 +2009,6 @@ function renderGroupCreditPanel() {
         <div>
             <div class="group-credit-title">🎯 当前组学分要求：${required} 学分</div>
             <div style="font-size:11px; color:#94a3b8; margin-top:4px;">
-                课程学分已自动从 raw[1] 读取，例如 raw[1] = 2 表示 2 学分
             </div>
         </div>
         <div class="group-credit-info ${remain === 0 ? 'done' : ''}">
